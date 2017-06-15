@@ -32,6 +32,9 @@ I will make english version later.
 
 For compiling arduino sketch, you need IR library from: https://github.com/z3t0/Arduino-IRremote (thx to z3t0 btw!)
 
+![20170615_170813](https://user-images.githubusercontent.com/667242/27188365-373f9bf6-51ee-11e7-9fa5-0ab6333d29df.png)
+![prototype](https://user-images.githubusercontent.com/667242/27188366-375cec7e-51ee-11e7-9433-fae0f8e78bf7.png)
+
 
 ![netflx](https://user-images.githubusercontent.com/667242/27181880-bf63bae0-51d9-11e7-9a59-b8d7dcfff9d2.png)
 ![program](https://user-images.githubusercontent.com/667242/27181882-bf855e84-51d9-11e7-9da4-40af4232694b.png)
