@@ -204,7 +204,7 @@ namespace irRemote
                 if (_cbSPEED.Checked)
                 {
                     R();
-                    Program.OSD_TXT = string.Format("Prędkość myszki {0}", line.Remove(0, 2));
+                    Program.OSD_TXT = string.Format("Prędkość myszki\n[ {0}px ]", line.Remove(0, 2));
                 }
             }
 
@@ -374,9 +374,10 @@ namespace irRemote
             IKONA.Text = "Pilot USB";
             IKONA.Icon = Properties.Resources.irremote;
             IKONA.Visible = true;
-            _cSerialPort.Text = PORT.getPorts("Arduino Leonardo");
+            _cSerialPort.Text = PORT.getPorts(STALE.DEVICE);
             TIK.Interval = 500; // sprawdzamy co pół sekundy
             TIK.Start();
+            _cOSDCOLOR.SelectedIndex = 0;
 
             Program.OSD_ICO = Properties.Resources.Plex_Logo;
             Program.OSD_TXT = "Testowy\ntekst...";
@@ -445,6 +446,12 @@ namespace irRemote
         private void _cCOLORPREV_Click(object sender, EventArgs e)
         {
             Program.Animating = true;
+        }
+
+        private void _cmnushow_Click(object sender, EventArgs e)
+        {
+            this.Show();
+            this.WindowState = FormWindowState.Normal;
         }
     }
 

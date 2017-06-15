@@ -12,6 +12,7 @@
  */
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Drawing;
 using System.Linq;
 using System.Threading.Tasks;
@@ -22,6 +23,9 @@ namespace irRemote
     static class Program
     {
         #region some vars
+        static private string appNAME = Process.GetCurrentProcess().ProcessName;
+        static Process[] processes = Process.GetProcessesByName(appNAME);
+
         static private Color _osd = STALE.KOLOR.BIALY;
         static private string _osdtxt = "Ładowanie...";
         static private Image _osdimg;
@@ -38,12 +42,25 @@ namespace irRemote
         #endregion
 
 
+        
         [STAThread]
         static void Main()
         {
-            Application.EnableVisualStyles();
-            Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new frmMain());
+#if !DEBUG
+            if (processes.Length > 1)
+            {
+                MessageBox.Show(string.Format("{0} is already running.", appNAME));
+                return;
+            }
+            else
+            {
+#endif
+                Application.EnableVisualStyles();
+                Application.SetCompatibleTextRenderingDefault(false);
+                Application.Run(new frmMain());
+#if !DEBUG
+        }
+#endif
         }
     }
 }

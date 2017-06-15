@@ -74,6 +74,8 @@ namespace irRemote
             this._cCOLORPREV = new System.Windows.Forms.Panel();
             this._cmnuIKONKA = new System.Windows.Forms.ContextMenuStrip(this.components);
             this._cmnuzamknij = new System.Windows.Forms.ToolStripMenuItem();
+            this._cmnushow = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
             this._cSTRIP.SuspendLayout();
             this._cGRUPA.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this._cSEPA)).BeginInit();
@@ -86,7 +88,7 @@ namespace irRemote
             this._cSTRIP.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this._cPORTLABEL,
             this._cSerialPort});
-            this._cSTRIP.Location = new System.Drawing.Point(0, 367);
+            this._cSTRIP.Location = new System.Drawing.Point(0, 372);
             this._cSTRIP.Name = "_cSTRIP";
             this._cSTRIP.Size = new System.Drawing.Size(462, 22);
             this._cSTRIP.TabIndex = 0;
@@ -133,7 +135,7 @@ namespace irRemote
             this._cGRUPA.Controls.Add(this._cbTRYB);
             this._cGRUPA.Location = new System.Drawing.Point(12, 12);
             this._cGRUPA.Name = "_cGRUPA";
-            this._cGRUPA.Size = new System.Drawing.Size(438, 306);
+            this._cGRUPA.Size = new System.Drawing.Size(438, 307);
             this._cGRUPA.TabIndex = 1;
             this._cGRUPA.TabStop = false;
             this._cGRUPA.Text = "Zdarzenia";
@@ -144,7 +146,7 @@ namespace irRemote
             this._cbBLUE.AutoSize = true;
             this._cbBLUE.Checked = true;
             this._cbBLUE.CheckState = System.Windows.Forms.CheckState.Checked;
-            this._cbBLUE.Location = new System.Drawing.Point(316, 275);
+            this._cbBLUE.Location = new System.Drawing.Point(316, 276);
             this._cbBLUE.Name = "_cbBLUE";
             this._cbBLUE.Size = new System.Drawing.Size(78, 17);
             this._cbBLUE.TabIndex = 21;
@@ -157,7 +159,7 @@ namespace irRemote
             this._cbYELLOW.AutoSize = true;
             this._cbYELLOW.Checked = true;
             this._cbYELLOW.CheckState = System.Windows.Forms.CheckState.Checked;
-            this._cbYELLOW.Location = new System.Drawing.Point(228, 275);
+            this._cbYELLOW.Location = new System.Drawing.Point(228, 276);
             this._cbYELLOW.Name = "_cbYELLOW";
             this._cbYELLOW.Size = new System.Drawing.Size(62, 17);
             this._cbYELLOW.TabIndex = 20;
@@ -170,7 +172,7 @@ namespace irRemote
             this._cbGREEN.AutoSize = true;
             this._cbGREEN.Checked = true;
             this._cbGREEN.CheckState = System.Windows.Forms.CheckState.Checked;
-            this._cbGREEN.Location = new System.Drawing.Point(130, 275);
+            this._cbGREEN.Location = new System.Drawing.Point(130, 276);
             this._cbGREEN.Name = "_cbGREEN";
             this._cbGREEN.Size = new System.Drawing.Size(72, 17);
             this._cbGREEN.TabIndex = 19;
@@ -183,7 +185,7 @@ namespace irRemote
             this._cbRED.AutoSize = true;
             this._cbRED.Checked = true;
             this._cbRED.CheckState = System.Windows.Forms.CheckState.Checked;
-            this._cbRED.Location = new System.Drawing.Point(15, 275);
+            this._cbRED.Location = new System.Drawing.Point(15, 276);
             this._cbRED.Name = "_cbRED";
             this._cbRED.Size = new System.Drawing.Size(89, 17);
             this._cbRED.TabIndex = 18;
@@ -428,7 +430,7 @@ namespace irRemote
             // 
             this._cLabelKOL.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this._cLabelKOL.AutoSize = true;
-            this._cLabelKOL.Location = new System.Drawing.Point(12, 334);
+            this._cLabelKOL.Location = new System.Drawing.Point(12, 339);
             this._cLabelKOL.Name = "_cLabelKOL";
             this._cLabelKOL.Size = new System.Drawing.Size(57, 13);
             this._cLabelKOL.TabIndex = 2;
@@ -449,7 +451,7 @@ namespace irRemote
             "Zielony",
             "Fioletowy",
             "Błękitny"});
-            this._cOSDCOLOR.Location = new System.Drawing.Point(75, 330);
+            this._cOSDCOLOR.Location = new System.Drawing.Point(75, 335);
             this._cOSDCOLOR.Name = "_cOSDCOLOR";
             this._cOSDCOLOR.Size = new System.Drawing.Size(227, 21);
             this._cOSDCOLOR.TabIndex = 3;
@@ -458,7 +460,7 @@ namespace irRemote
             // _cCOLORPREV
             // 
             this._cCOLORPREV.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this._cCOLORPREV.Location = new System.Drawing.Point(320, 330);
+            this._cCOLORPREV.Location = new System.Drawing.Point(320, 335);
             this._cCOLORPREV.Name = "_cCOLORPREV";
             this._cCOLORPREV.Size = new System.Drawing.Size(56, 21);
             this._cCOLORPREV.TabIndex = 4;
@@ -467,22 +469,37 @@ namespace irRemote
             // _cmnuIKONKA
             // 
             this._cmnuIKONKA.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this._cmnushow,
+            this.toolStripSeparator1,
             this._cmnuzamknij});
             this._cmnuIKONKA.Name = "_cmnuIKONKA";
-            this._cmnuIKONKA.Size = new System.Drawing.Size(118, 26);
+            this._cmnuIKONKA.Size = new System.Drawing.Size(153, 76);
             // 
             // _cmnuzamknij
             // 
             this._cmnuzamknij.Name = "_cmnuzamknij";
-            this._cmnuzamknij.Size = new System.Drawing.Size(117, 22);
+            this._cmnuzamknij.Size = new System.Drawing.Size(152, 22);
             this._cmnuzamknij.Text = "Zamknij";
             this._cmnuzamknij.Click += new System.EventHandler(this._cmnuzamknij_Click);
+            // 
+            // _cmnushow
+            // 
+            this._cmnushow.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold);
+            this._cmnushow.Name = "_cmnushow";
+            this._cmnushow.Size = new System.Drawing.Size(152, 22);
+            this._cmnushow.Text = "Konfiguracja";
+            this._cmnushow.Click += new System.EventHandler(this._cmnushow_Click);
+            // 
+            // toolStripSeparator1
+            // 
+            this.toolStripSeparator1.Name = "toolStripSeparator1";
+            this.toolStripSeparator1.Size = new System.Drawing.Size(149, 6);
             // 
             // frmMain
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(462, 389);
+            this.ClientSize = new System.Drawing.Size(462, 394);
             this.Controls.Add(this._cCOLORPREV);
             this.Controls.Add(this._cOSDCOLOR);
             this.Controls.Add(this._cLabelKOL);
@@ -540,6 +557,8 @@ namespace irRemote
         private System.Windows.Forms.Panel _cCOLORPREV;
         private System.Windows.Forms.ContextMenuStrip _cmnuIKONKA;
         private System.Windows.Forms.ToolStripMenuItem _cmnuzamknij;
+        private System.Windows.Forms.ToolStripMenuItem _cmnushow;
+        private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
     }
 }
 
