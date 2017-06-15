@@ -316,6 +316,16 @@ namespace irRemote
                 }
             }
             #endregion
+
+            #region Other functions
+            if (line.Contains(STALE.SHOWME))
+            {
+                if (this.WindowState == FormWindowState.Minimized)
+                {
+                    SHOW();
+                }
+            }
+            #endregion
         }
 
 
@@ -327,8 +337,7 @@ namespace irRemote
 
         private void ICON_KLIK(object sender, EventArgs e)
         {
-            this.Show();
-            this.WindowState = FormWindowState.Normal;
+            SHOW();
         }
 
         private void ZAMYKANIE(object sender, FormClosingEventArgs e)
@@ -445,6 +454,12 @@ namespace irRemote
         }
         #endregion
 
+        private void SHOW()
+        {
+            this.Show();
+            this.WindowState = FormWindowState.Normal;
+        }
+
         private void frmMain_Shown(object sender, EventArgs e)
         {
             new frmOSD().Show();
@@ -462,8 +477,7 @@ namespace irRemote
 
         private void _cmnushow_Click(object sender, EventArgs e)
         {
-            this.Show();
-            this.WindowState = FormWindowState.Normal;
+            SHOW();
         }
     }
 

@@ -56,6 +56,8 @@ namespace irRemote
         internal static string ZOLTY { get => "x128"; }
         internal static string NIEBIESKI { get => "x129"; }
 
+        internal static string SHOWME { get => "x911"; }
+
         internal enum Tryb
         {
             Mysz,
