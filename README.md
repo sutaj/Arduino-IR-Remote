@@ -21,17 +21,18 @@ IR LED
  *   vcc -> +5V
  *   gnd -> gnd
  *   out -> arduino pin 2
- *   
+     
  *   MODE INDICATOR LED:
  *   anode -> resistor + +5V
  *   cathode -> arduino pin 4
- *   
+     
  *   MOUSE INDICATOR LED:
  *   anode -> resistor -> +5V rail
  *   cathode -> arduino pin 5 (+uncomment line #48 and #103-112 in sketch)
 
 
 To check your Remote codes just uncomment about 115 line:
+    
     /* sprawdzanie stanu klawiszy...
 
       Serial.print("Przycisk:  0x");
