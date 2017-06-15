@@ -83,7 +83,6 @@
     <Compile Include="Porty.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="RYSOWANIE.cs" />
     <Compile Include="STALE.cs" />
     <EmbeddedResource Include="frmMain.resx">
       <DependentUpon>frmMain.cs</DependentUpon>

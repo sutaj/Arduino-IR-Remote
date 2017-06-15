@@ -32,6 +32,7 @@ namespace irRemote
         static private int _timeout = 0;
         static private bool _animating = false;
         static private string _tryb;
+        static private bool _mysz = false;
 
         internal static Color OSD_COLOR { get => _osd; set => _osd = value; }
         internal static string OSD_TXT { get => _osdtxt; set => _osdtxt = value; }
@@ -39,10 +40,11 @@ namespace irRemote
         internal static int TimeOut { get => _timeout; set => _timeout = value; }
         internal static bool Animating { get => _animating; set => _animating = value; }
         internal static string TRYB { get => _tryb; set => _tryb = value; }
+        internal static bool MYSZ { get => _mysz; set => _mysz = value; }
         #endregion
 
 
-        
+
         [STAThread]
         static void Main()
         {

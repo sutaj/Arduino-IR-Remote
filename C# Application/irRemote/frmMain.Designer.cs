@@ -76,11 +76,13 @@ namespace irRemote
             this._cmnuzamknij = new System.Windows.Forms.ToolStripMenuItem();
             this._cmnushow = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
+            this._cpicTRYB = new System.Windows.Forms.PictureBox();
             this._cSTRIP.SuspendLayout();
             this._cGRUPA.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this._cSEPA)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this._cSEP)).BeginInit();
             this._cmnuIKONKA.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this._cpicTRYB)).BeginInit();
             this.SuspendLayout();
             // 
             // _cSTRIP
@@ -110,6 +112,7 @@ namespace irRemote
             this._cGRUPA.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
+            this._cGRUPA.Controls.Add(this._cpicTRYB);
             this._cGRUPA.Controls.Add(this._cbBLUE);
             this._cGRUPA.Controls.Add(this._cbYELLOW);
             this._cGRUPA.Controls.Add(this._cbGREEN);
@@ -473,12 +476,12 @@ namespace irRemote
             this.toolStripSeparator1,
             this._cmnuzamknij});
             this._cmnuIKONKA.Name = "_cmnuIKONKA";
-            this._cmnuIKONKA.Size = new System.Drawing.Size(153, 76);
+            this._cmnuIKONKA.Size = new System.Drawing.Size(145, 54);
             // 
             // _cmnuzamknij
             // 
             this._cmnuzamknij.Name = "_cmnuzamknij";
-            this._cmnuzamknij.Size = new System.Drawing.Size(152, 22);
+            this._cmnuzamknij.Size = new System.Drawing.Size(144, 22);
             this._cmnuzamknij.Text = "Zamknij";
             this._cmnuzamknij.Click += new System.EventHandler(this._cmnuzamknij_Click);
             // 
@@ -486,14 +489,24 @@ namespace irRemote
             // 
             this._cmnushow.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold);
             this._cmnushow.Name = "_cmnushow";
-            this._cmnushow.Size = new System.Drawing.Size(152, 22);
+            this._cmnushow.Size = new System.Drawing.Size(144, 22);
             this._cmnushow.Text = "Konfiguracja";
             this._cmnushow.Click += new System.EventHandler(this._cmnushow_Click);
             // 
             // toolStripSeparator1
             // 
             this.toolStripSeparator1.Name = "toolStripSeparator1";
-            this.toolStripSeparator1.Size = new System.Drawing.Size(149, 6);
+            this.toolStripSeparator1.Size = new System.Drawing.Size(141, 6);
+            // 
+            // _cpicTRYB
+            // 
+            this._cpicTRYB.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this._cpicTRYB.Location = new System.Drawing.Point(379, 20);
+            this._cpicTRYB.Name = "_cpicTRYB";
+            this._cpicTRYB.Size = new System.Drawing.Size(53, 50);
+            this._cpicTRYB.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
+            this._cpicTRYB.TabIndex = 22;
+            this._cpicTRYB.TabStop = false;
             // 
             // frmMain
             // 
@@ -518,6 +531,7 @@ namespace irRemote
             ((System.ComponentModel.ISupportInitialize)(this._cSEPA)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this._cSEP)).EndInit();
             this._cmnuIKONKA.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this._cpicTRYB)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -559,6 +573,7 @@ namespace irRemote
         private System.Windows.Forms.ToolStripMenuItem _cmnuzamknij;
         private System.Windows.Forms.ToolStripMenuItem _cmnushow;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
+        private System.Windows.Forms.PictureBox _cpicTRYB;
     }
 }
 

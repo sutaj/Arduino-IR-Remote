@@ -48,6 +48,7 @@ namespace irRemote
             IKONA.ContextMenuStrip = _cmnuIKONKA;
             sPORT.DtrEnable = true;
             sPORT.BaudRate = 9600;
+
         }
 
         private void MonitorSerial(object sender, SerialDataReceivedEventArgs e)
@@ -68,10 +69,28 @@ namespace irRemote
         private delegate void LineReceivedEvent(string line);
         private void LineReceived(string line)
         {
-            
-            
             #region Wykrywanie trybu
-            if(line.Contains(STALE.TRYB_ON))
+            if (line.Contains(STALE.MYSZ_OFF))
+            {
+                Program.MYSZ = false;
+                if (_cbMYSZ.Checked)
+                {
+                    R();
+                    Program.OSD_TXT = "Mysz Wyłączona";
+                }
+            }
+
+            if (line.Contains(STALE.MYSZ_ON))
+            {
+                Program.MYSZ = true;
+                if (_cbMYSZ.Checked)
+                {
+                    R();
+                    Program.OSD_TXT = "Mysz Włączona";
+                }
+            }
+
+            if (line.Contains(STALE.TRYB_ON))
             {
                 Program.TRYB = "netflix";
                 if (_cbTRYB.Checked)
@@ -79,7 +98,6 @@ namespace irRemote
                     R();
                     Program.OSD_TXT = "Włączenie trybu\nN E T F L I X";
                 }
-                Program.OSD_ICO = Properties.Resources.N_icon;
             }
 
             if (line.Contains(STALE.TRYB_OFF))
@@ -90,31 +108,8 @@ namespace irRemote
                     R();
                     Program.OSD_TXT = "Włączenie trybu\nP L E X";
                 }
-                Program.OSD_ICO = Properties.Resources.Plex_Logo;
             }
 
-            if (line.Contains(STALE.MYSZ_ON))
-            {
-                Program.TRYB = "mysz";
-                if (_cbMYSZ.Checked)
-                {
-                    R();
-                    Program.OSD_TXT = "Mysz Włączona";
-                }
-                Program.OSD_ICO = Properties.Resources.mouse;
-            }
-            if (line.Contains(STALE.MYSZ_OFF))
-            {
-                sPORT.Write("T");
-                System.Threading.Thread.Sleep(100);
-                sPORT.Write("W");
-                if (_cbMYSZ.Checked)
-                {
-                    R();
-                    Program.OSD_TXT = "Mysz Wyłączona";
-                }
-                Program.OSD_ICO = Properties.Resources.mouse;
-            }
             #endregion
 
             #region Przyciski
@@ -204,7 +199,7 @@ namespace irRemote
                 if (_cbSPEED.Checked)
                 {
                     R();
-                    Program.OSD_TXT = string.Format("Prędkość myszki\n[ {0}px ]", line.Remove(0, 2));
+                    Program.OSD_TXT = string.Format("Prędkość myszki\n[ {0}px ]", new StringBuilder(line.Remove(0, 2)).Length-1 );
                 }
             }
 
@@ -346,6 +341,22 @@ namespace irRemote
 
         private void TIKTAK(object sender, EventArgs e)
         {
+            if (Program.MYSZ)
+            {
+                Program.OSD_ICO = Properties.Resources.mouse;
+            }
+            else
+            {
+                if (Program.TRYB == "netflix")
+                {
+                    Program.OSD_ICO = Properties.Resources.N_icon;
+                }
+                else
+                {
+                    Program.OSD_ICO = Properties.Resources.Plex_Logo;
+                }
+            }
+
             port = PORT.getPorts(STALE.DEVICE);
             if (port != null)
             {
@@ -356,7 +367,7 @@ namespace irRemote
                     sPORT.Open();
                     sPORT.Write("T");
                     System.Threading.Thread.Sleep(300);
-                    sPORT.Write("W");
+                    sPORT.Write("M");
                 }
             }
             else
@@ -367,6 +378,7 @@ namespace irRemote
             {
                 this.Hide();
             }
+            _cpicTRYB.Image = Program.OSD_ICO;
         }
 
         private void frmMain_Load(object sender, EventArgs e)
@@ -375,7 +387,7 @@ namespace irRemote
             IKONA.Icon = Properties.Resources.irremote;
             IKONA.Visible = true;
             _cSerialPort.Text = PORT.getPorts(STALE.DEVICE);
-            TIK.Interval = 500; // sprawdzamy co pół sekundy
+            TIK.Interval = 250; // sprawdzamy co ćwierć sekundy
             TIK.Start();
             _cOSDCOLOR.SelectedIndex = 0;
 
