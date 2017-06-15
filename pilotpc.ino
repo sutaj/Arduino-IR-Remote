@@ -11,7 +11,7 @@
 
 */
 
-/* FREE FOR NON COMERTIAL USE   O N L Y  ! */
+/* FREE FOR NON COMMERCIAL USE   O N L Y  ! */
 
 /*
  * pinouts
@@ -302,6 +302,9 @@ void loop() {
         Serial.println("x115");
         break;
 
+      case 0xFD38C7: // [PC] - show program (if running)
+        Serial.println("x911");
+        break;
 
       case 0xFD40BF: // 1
         Keyboard.write(49);
@@ -372,7 +375,7 @@ void loop() {
         delay(25);
         Keyboard.releaseAll();
         delay(25);
-        Keyboard.print("http://127.0.0.1:32400/web/index.html");
+        Keyboard.print("http://192.168.52.10:32400/web/index.html");
         Keyboard.press(0xB0);
         Serial.println("x127");
         break;
