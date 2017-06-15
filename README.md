@@ -1,4 +1,5 @@
-# Arduino-IR-Remote
+# Arduino-IR-Remote 
+# for NETFLIX / PLEX
 Arduino sketch for PC ir remote and custom made software
 
 FREE FOR NON COMMERCIAL USE ONLY !
