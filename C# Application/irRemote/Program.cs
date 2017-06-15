@@ -11,11 +11,8 @@
  *                                 
  */
 using System;
-using System.Collections.Generic;
 using System.Diagnostics;
 using System.Drawing;
-using System.Linq;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace irRemote
@@ -27,7 +24,7 @@ namespace irRemote
         static Process[] processes = Process.GetProcessesByName(appNAME);
 
         static private Color _osd = STALE.KOLOR.BIALY;
-        static private string _osdtxt = "Ładowanie...";
+        static private string _osdtxt = "LOADING...";
         static private Image _osdimg;
         static private int _timeout = 0;
         static private bool _animating = false;

@@ -21,6 +21,8 @@ namespace irRemote
         // change name for your arduino board, or atmega chipset
         internal static string DEVICE { get => "Arduino Leonardo"; }
 
+        internal static string TRAY_NAME { get => "USB REMOTE"; }
+
         internal static string POWER { get => "x100"; }
         internal static string TRYB_ON { get => "x101.1"; }
         internal static string TRYB_OFF { get => "x101.0"; }

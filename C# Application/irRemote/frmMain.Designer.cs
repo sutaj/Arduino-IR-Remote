@@ -46,6 +46,7 @@ namespace irRemote
             this._cPORTLABEL = new System.Windows.Forms.ToolStripStatusLabel();
             this._cSerialPort = new System.Windows.Forms.ToolStripStatusLabel();
             this._cGRUPA = new System.Windows.Forms.GroupBox();
+            this._cpicTRYB = new System.Windows.Forms.PictureBox();
             this._cbBLUE = new System.Windows.Forms.CheckBox();
             this._cbYELLOW = new System.Windows.Forms.CheckBox();
             this._cbGREEN = new System.Windows.Forms.CheckBox();
@@ -73,16 +74,16 @@ namespace irRemote
             this._cOSDCOLOR = new System.Windows.Forms.ComboBox();
             this._cCOLORPREV = new System.Windows.Forms.Panel();
             this._cmnuIKONKA = new System.Windows.Forms.ContextMenuStrip(this.components);
-            this._cmnuzamknij = new System.Windows.Forms.ToolStripMenuItem();
             this._cmnushow = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
-            this._cpicTRYB = new System.Windows.Forms.PictureBox();
+            this._cmnuzamknij = new System.Windows.Forms.ToolStripMenuItem();
+            this._cbMINIMAL = new System.Windows.Forms.CheckBox();
             this._cSTRIP.SuspendLayout();
             this._cGRUPA.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this._cpicTRYB)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this._cSEPA)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this._cSEP)).BeginInit();
             this._cmnuIKONKA.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this._cpicTRYB)).BeginInit();
             this.SuspendLayout();
             // 
             // _cSTRIP
@@ -90,7 +91,7 @@ namespace irRemote
             this._cSTRIP.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this._cPORTLABEL,
             this._cSerialPort});
-            this._cSTRIP.Location = new System.Drawing.Point(0, 372);
+            this._cSTRIP.Location = new System.Drawing.Point(0, 426);
             this._cSTRIP.Name = "_cSTRIP";
             this._cSTRIP.Size = new System.Drawing.Size(462, 22);
             this._cSTRIP.TabIndex = 0;
@@ -99,8 +100,8 @@ namespace irRemote
             // _cPORTLABEL
             // 
             this._cPORTLABEL.Name = "_cPORTLABEL";
-            this._cPORTLABEL.Size = new System.Drawing.Size(82, 17);
-            this._cPORTLABEL.Text = "Aktualny port:";
+            this._cPORTLABEL.Size = new System.Drawing.Size(70, 17);
+            this._cPORTLABEL.Text = "Device port:";
             // 
             // _cSerialPort
             // 
@@ -138,35 +139,43 @@ namespace irRemote
             this._cGRUPA.Controls.Add(this._cbTRYB);
             this._cGRUPA.Location = new System.Drawing.Point(12, 12);
             this._cGRUPA.Name = "_cGRUPA";
-            this._cGRUPA.Size = new System.Drawing.Size(438, 307);
+            this._cGRUPA.Size = new System.Drawing.Size(438, 329);
             this._cGRUPA.TabIndex = 1;
             this._cGRUPA.TabStop = false;
-            this._cGRUPA.Text = "Zdarzenia";
+            this._cGRUPA.Text = "Show events:";
+            // 
+            // _cpicTRYB
+            // 
+            this._cpicTRYB.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this._cpicTRYB.Location = new System.Drawing.Point(379, 20);
+            this._cpicTRYB.Name = "_cpicTRYB";
+            this._cpicTRYB.Size = new System.Drawing.Size(53, 50);
+            this._cpicTRYB.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
+            this._cpicTRYB.TabIndex = 22;
+            this._cpicTRYB.TabStop = false;
             // 
             // _cbBLUE
             // 
             this._cbBLUE.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this._cbBLUE.AutoSize = true;
             this._cbBLUE.Checked = true;
             this._cbBLUE.CheckState = System.Windows.Forms.CheckState.Checked;
-            this._cbBLUE.Location = new System.Drawing.Point(316, 276);
+            this._cbBLUE.Location = new System.Drawing.Point(334, 298);
             this._cbBLUE.Name = "_cbBLUE";
-            this._cbBLUE.Size = new System.Drawing.Size(78, 17);
+            this._cbBLUE.Size = new System.Drawing.Size(93, 17);
             this._cbBLUE.TabIndex = 21;
-            this._cbBLUE.Text = "NIEBIESKI";
+            this._cbBLUE.Text = "[BLUE]";
             this._cbBLUE.UseVisualStyleBackColor = true;
             // 
             // _cbYELLOW
             // 
             this._cbYELLOW.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this._cbYELLOW.AutoSize = true;
             this._cbYELLOW.Checked = true;
             this._cbYELLOW.CheckState = System.Windows.Forms.CheckState.Checked;
-            this._cbYELLOW.Location = new System.Drawing.Point(228, 276);
+            this._cbYELLOW.Location = new System.Drawing.Point(221, 298);
             this._cbYELLOW.Name = "_cbYELLOW";
-            this._cbYELLOW.Size = new System.Drawing.Size(62, 17);
+            this._cbYELLOW.Size = new System.Drawing.Size(77, 17);
             this._cbYELLOW.TabIndex = 20;
-            this._cbYELLOW.Text = "ŻÓŁTY";
+            this._cbYELLOW.Text = "[YELLOW]";
             this._cbYELLOW.UseVisualStyleBackColor = true;
             // 
             // _cbGREEN
@@ -175,11 +184,11 @@ namespace irRemote
             this._cbGREEN.AutoSize = true;
             this._cbGREEN.Checked = true;
             this._cbGREEN.CheckState = System.Windows.Forms.CheckState.Checked;
-            this._cbGREEN.Location = new System.Drawing.Point(130, 276);
+            this._cbGREEN.Location = new System.Drawing.Point(111, 298);
             this._cbGREEN.Name = "_cbGREEN";
-            this._cbGREEN.Size = new System.Drawing.Size(72, 17);
+            this._cbGREEN.Size = new System.Drawing.Size(70, 17);
             this._cbGREEN.TabIndex = 19;
-            this._cbGREEN.Text = "ZIELONY";
+            this._cbGREEN.Text = "[GREEN]";
             this._cbGREEN.UseVisualStyleBackColor = true;
             // 
             // _cbRED
@@ -188,24 +197,23 @@ namespace irRemote
             this._cbRED.AutoSize = true;
             this._cbRED.Checked = true;
             this._cbRED.CheckState = System.Windows.Forms.CheckState.Checked;
-            this._cbRED.Location = new System.Drawing.Point(15, 276);
+            this._cbRED.Location = new System.Drawing.Point(15, 298);
             this._cbRED.Name = "_cbRED";
-            this._cbRED.Size = new System.Drawing.Size(89, 17);
+            this._cbRED.Size = new System.Drawing.Size(55, 17);
             this._cbRED.TabIndex = 18;
-            this._cbRED.Text = "CZERWONY";
+            this._cbRED.Text = "[RED]";
             this._cbRED.UseVisualStyleBackColor = true;
             // 
             // _cbNUMERY
             // 
             this._cbNUMERY.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this._cbNUMERY.AutoSize = true;
             this._cbNUMERY.Checked = true;
             this._cbNUMERY.CheckState = System.Windows.Forms.CheckState.Checked;
             this._cbNUMERY.Location = new System.Drawing.Point(259, 238);
             this._cbNUMERY.Name = "_cbNUMERY";
-            this._cbNUMERY.Size = new System.Drawing.Size(85, 17);
+            this._cbNUMERY.Size = new System.Drawing.Size(114, 17);
             this._cbNUMERY.TabIndex = 17;
-            this._cbNUMERY.Text = "Przyciski 0-9";
+            this._cbNUMERY.Text = "Buttons [0-9]";
             this._cbNUMERY.UseVisualStyleBackColor = true;
             // 
             // _cbEXIT
@@ -215,22 +223,21 @@ namespace irRemote
             this._cbEXIT.CheckState = System.Windows.Forms.CheckState.Checked;
             this._cbEXIT.Location = new System.Drawing.Point(15, 238);
             this._cbEXIT.Name = "_cbEXIT";
-            this._cbEXIT.Size = new System.Drawing.Size(98, 17);
+            this._cbEXIT.Size = new System.Drawing.Size(90, 17);
             this._cbEXIT.TabIndex = 16;
-            this._cbEXIT.Text = "Przycisku EXIT";
+            this._cbEXIT.Text = "Button [EXIT]";
             this._cbEXIT.UseVisualStyleBackColor = true;
             // 
             // _cbCHDW
             // 
             this._cbCHDW.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this._cbCHDW.AutoSize = true;
             this._cbCHDW.Checked = true;
             this._cbCHDW.CheckState = System.Windows.Forms.CheckState.Checked;
             this._cbCHDW.Location = new System.Drawing.Point(259, 214);
             this._cbCHDW.Name = "_cbCHDW";
-            this._cbCHDW.Size = new System.Drawing.Size(92, 17);
+            this._cbCHDW.Size = new System.Drawing.Size(114, 17);
             this._cbCHDW.TabIndex = 15;
-            this._cbCHDW.Text = "Przycisku CH-";
+            this._cbCHDW.Text = "Button [CH-]";
             this._cbCHDW.UseVisualStyleBackColor = true;
             // 
             // _cbCHUP
@@ -240,22 +247,21 @@ namespace irRemote
             this._cbCHUP.CheckState = System.Windows.Forms.CheckState.Checked;
             this._cbCHUP.Location = new System.Drawing.Point(15, 214);
             this._cbCHUP.Name = "_cbCHUP";
-            this._cbCHUP.Size = new System.Drawing.Size(95, 17);
+            this._cbCHUP.Size = new System.Drawing.Size(87, 17);
             this._cbCHUP.TabIndex = 14;
-            this._cbCHUP.Text = "Przycisku CH+";
+            this._cbCHUP.Text = "Button [CH+]";
             this._cbCHUP.UseVisualStyleBackColor = true;
             // 
             // _cbVOLDW
             // 
             this._cbVOLDW.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this._cbVOLDW.AutoSize = true;
             this._cbVOLDW.Checked = true;
             this._cbVOLDW.CheckState = System.Windows.Forms.CheckState.Checked;
             this._cbVOLDW.Location = new System.Drawing.Point(259, 190);
             this._cbVOLDW.Name = "_cbVOLDW";
-            this._cbVOLDW.Size = new System.Drawing.Size(98, 17);
+            this._cbVOLDW.Size = new System.Drawing.Size(114, 17);
             this._cbVOLDW.TabIndex = 13;
-            this._cbVOLDW.Text = "Przycisku VOL-";
+            this._cbVOLDW.Text = "Button [VOL-]";
             this._cbVOLDW.UseVisualStyleBackColor = true;
             // 
             // _cbVOLUP
@@ -265,22 +271,21 @@ namespace irRemote
             this._cbVOLUP.CheckState = System.Windows.Forms.CheckState.Checked;
             this._cbVOLUP.Location = new System.Drawing.Point(15, 190);
             this._cbVOLUP.Name = "_cbVOLUP";
-            this._cbVOLUP.Size = new System.Drawing.Size(101, 17);
+            this._cbVOLUP.Size = new System.Drawing.Size(93, 17);
             this._cbVOLUP.TabIndex = 12;
-            this._cbVOLUP.Text = "Przycisku VOL+";
+            this._cbVOLUP.Text = "Button [VOL+]";
             this._cbVOLUP.UseVisualStyleBackColor = true;
             // 
             // _cbDOL
             // 
             this._cbDOL.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this._cbDOL.AutoSize = true;
             this._cbDOL.Checked = true;
             this._cbDOL.CheckState = System.Windows.Forms.CheckState.Checked;
             this._cbDOL.Location = new System.Drawing.Point(259, 167);
             this._cbDOL.Name = "_cbDOL";
-            this._cbDOL.Size = new System.Drawing.Size(103, 17);
+            this._cbDOL.Size = new System.Drawing.Size(114, 17);
             this._cbDOL.TabIndex = 11;
-            this._cbDOL.Text = "Przycisku w Dół";
+            this._cbDOL.Text = "Button [DOWN]";
             this._cbDOL.UseVisualStyleBackColor = true;
             // 
             // _cbGORA
@@ -290,22 +295,21 @@ namespace irRemote
             this._cbGORA.CheckState = System.Windows.Forms.CheckState.Checked;
             this._cbGORA.Location = new System.Drawing.Point(15, 167);
             this._cbGORA.Name = "_cbGORA";
-            this._cbGORA.Size = new System.Drawing.Size(108, 17);
+            this._cbGORA.Size = new System.Drawing.Size(81, 17);
             this._cbGORA.TabIndex = 10;
-            this._cbGORA.Text = "Przycisku w Górę";
+            this._cbGORA.Text = "Button [UP]";
             this._cbGORA.UseVisualStyleBackColor = true;
             // 
             // _cbLEWO
             // 
             this._cbLEWO.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this._cbLEWO.AutoSize = true;
             this._cbLEWO.Checked = true;
             this._cbLEWO.CheckState = System.Windows.Forms.CheckState.Checked;
             this._cbLEWO.Location = new System.Drawing.Point(259, 143);
             this._cbLEWO.Name = "_cbLEWO";
-            this._cbLEWO.Size = new System.Drawing.Size(111, 17);
+            this._cbLEWO.Size = new System.Drawing.Size(114, 17);
             this._cbLEWO.TabIndex = 9;
-            this._cbLEWO.Text = "Przycisku w Lewo";
+            this._cbLEWO.Text = "Button [LEFT]";
             this._cbLEWO.UseVisualStyleBackColor = true;
             // 
             // _cbPRAWO
@@ -315,22 +319,21 @@ namespace irRemote
             this._cbPRAWO.CheckState = System.Windows.Forms.CheckState.Checked;
             this._cbPRAWO.Location = new System.Drawing.Point(15, 143);
             this._cbPRAWO.Name = "_cbPRAWO";
-            this._cbPRAWO.Size = new System.Drawing.Size(115, 17);
+            this._cbPRAWO.Size = new System.Drawing.Size(100, 17);
             this._cbPRAWO.TabIndex = 8;
-            this._cbPRAWO.Text = "Przycisku w Prawo";
+            this._cbPRAWO.Text = "Button [RIGHT]";
             this._cbPRAWO.UseVisualStyleBackColor = true;
             // 
             // _cbINPUT
             // 
             this._cbINPUT.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this._cbINPUT.AutoSize = true;
             this._cbINPUT.Checked = true;
             this._cbINPUT.CheckState = System.Windows.Forms.CheckState.Checked;
             this._cbINPUT.Location = new System.Drawing.Point(259, 119);
             this._cbINPUT.Name = "_cbINPUT";
-            this._cbINPUT.Size = new System.Drawing.Size(101, 17);
+            this._cbINPUT.Size = new System.Drawing.Size(114, 17);
             this._cbINPUT.TabIndex = 7;
-            this._cbINPUT.Text = "Przycisk INPUT";
+            this._cbINPUT.Text = "Button [IMPUT]";
             this._cbINPUT.UseVisualStyleBackColor = true;
             // 
             // _cbAUTO
@@ -340,22 +343,21 @@ namespace irRemote
             this._cbAUTO.CheckState = System.Windows.Forms.CheckState.Checked;
             this._cbAUTO.Location = new System.Drawing.Point(15, 119);
             this._cbAUTO.Name = "_cbAUTO";
-            this._cbAUTO.Size = new System.Drawing.Size(104, 17);
+            this._cbAUTO.Size = new System.Drawing.Size(96, 17);
             this._cbAUTO.TabIndex = 6;
-            this._cbAUTO.Text = "Przycisku AUTO";
+            this._cbAUTO.Text = "Button [AUTO]";
             this._cbAUTO.UseVisualStyleBackColor = true;
             // 
             // _cbMUTE
             // 
             this._cbMUTE.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this._cbMUTE.AutoSize = true;
             this._cbMUTE.Checked = true;
             this._cbMUTE.CheckState = System.Windows.Forms.CheckState.Checked;
             this._cbMUTE.Location = new System.Drawing.Point(259, 95);
             this._cbMUTE.Name = "_cbMUTE";
-            this._cbMUTE.Size = new System.Drawing.Size(105, 17);
+            this._cbMUTE.Size = new System.Drawing.Size(114, 17);
             this._cbMUTE.TabIndex = 5;
-            this._cbMUTE.Text = "Przycisku MUTE";
+            this._cbMUTE.Text = "Button [MUTE]";
             this._cbMUTE.UseVisualStyleBackColor = true;
             // 
             // _cbPOWER
@@ -365,9 +367,9 @@ namespace irRemote
             this._cbPOWER.CheckState = System.Windows.Forms.CheckState.Checked;
             this._cbPOWER.Location = new System.Drawing.Point(15, 95);
             this._cbPOWER.Name = "_cbPOWER";
-            this._cbPOWER.Size = new System.Drawing.Size(115, 17);
+            this._cbPOWER.Size = new System.Drawing.Size(107, 17);
             this._cbPOWER.TabIndex = 4;
-            this._cbPOWER.Text = "Przycisku POWER";
+            this._cbPOWER.Text = "Button [POWER]";
             this._cbPOWER.UseVisualStyleBackColor = true;
             // 
             // _cSEPA
@@ -395,14 +397,13 @@ namespace irRemote
             // _cbSPEED
             // 
             this._cbSPEED.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this._cbSPEED.AutoSize = true;
             this._cbSPEED.Checked = true;
             this._cbSPEED.CheckState = System.Windows.Forms.CheckState.Checked;
             this._cbSPEED.Location = new System.Drawing.Point(259, 53);
             this._cbSPEED.Name = "_cbSPEED";
-            this._cbSPEED.Size = new System.Drawing.Size(103, 17);
+            this._cbSPEED.Size = new System.Drawing.Size(114, 17);
             this._cbSPEED.TabIndex = 2;
-            this._cbSPEED.Text = "Szybkość myszy";
+            this._cbSPEED.Text = "Mouse speed";
             this._cbSPEED.UseVisualStyleBackColor = true;
             // 
             // _cbMYSZ
@@ -412,9 +413,9 @@ namespace irRemote
             this._cbMYSZ.CheckState = System.Windows.Forms.CheckState.Checked;
             this._cbMYSZ.Location = new System.Drawing.Point(15, 53);
             this._cbMYSZ.Name = "_cbMYSZ";
-            this._cbMYSZ.Size = new System.Drawing.Size(97, 17);
+            this._cbMYSZ.Size = new System.Drawing.Size(106, 17);
             this._cbMYSZ.TabIndex = 1;
-            this._cbMYSZ.Text = "Tryb pilot/mysz";
+            this._cbMYSZ.Text = "Remote / Mouse";
             this._cbMYSZ.UseVisualStyleBackColor = true;
             // 
             // _cbTRYB
@@ -422,22 +423,23 @@ namespace irRemote
             this._cbTRYB.AutoSize = true;
             this._cbTRYB.Checked = true;
             this._cbTRYB.CheckState = System.Windows.Forms.CheckState.Checked;
+            this._cbTRYB.Cursor = System.Windows.Forms.Cursors.Default;
             this._cbTRYB.Location = new System.Drawing.Point(15, 29);
             this._cbTRYB.Name = "_cbTRYB";
-            this._cbTRYB.Size = new System.Drawing.Size(132, 17);
+            this._cbTRYB.Size = new System.Drawing.Size(138, 17);
             this._cbTRYB.TabIndex = 0;
-            this._cbTRYB.Text = "Tryb NETFLIX / PLEX";
+            this._cbTRYB.Text = "Mode NETFLIX / PLEX";
             this._cbTRYB.UseVisualStyleBackColor = true;
             // 
             // _cLabelKOL
             // 
             this._cLabelKOL.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this._cLabelKOL.AutoSize = true;
-            this._cLabelKOL.Location = new System.Drawing.Point(12, 339);
+            this._cLabelKOL.Location = new System.Drawing.Point(12, 394);
             this._cLabelKOL.Name = "_cLabelKOL";
-            this._cLabelKOL.Size = new System.Drawing.Size(57, 13);
+            this._cLabelKOL.Size = new System.Drawing.Size(56, 13);
             this._cLabelKOL.TabIndex = 2;
-            this._cLabelKOL.Text = "Kolor OSD";
+            this._cLabelKOL.Text = "OSD color";
             // 
             // _cOSDCOLOR
             // 
@@ -445,16 +447,16 @@ namespace irRemote
             this._cOSDCOLOR.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this._cOSDCOLOR.FormattingEnabled = true;
             this._cOSDCOLOR.Items.AddRange(new object[] {
-            "Biały",
-            "Czarny",
-            "Szary",
-            "Niebieski",
-            "Zółty",
-            "Czerwony",
-            "Zielony",
-            "Fioletowy",
-            "Błękitny"});
-            this._cOSDCOLOR.Location = new System.Drawing.Point(75, 335);
+            "White",
+            "Black",
+            "Grey",
+            "Blue",
+            "Yellow",
+            "Red",
+            "Green",
+            "Purple",
+            "Azure"});
+            this._cOSDCOLOR.Location = new System.Drawing.Point(75, 390);
             this._cOSDCOLOR.Name = "_cOSDCOLOR";
             this._cOSDCOLOR.Size = new System.Drawing.Size(227, 21);
             this._cOSDCOLOR.TabIndex = 3;
@@ -463,7 +465,7 @@ namespace irRemote
             // _cCOLORPREV
             // 
             this._cCOLORPREV.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this._cCOLORPREV.Location = new System.Drawing.Point(320, 335);
+            this._cCOLORPREV.Location = new System.Drawing.Point(320, 390);
             this._cCOLORPREV.Name = "_cCOLORPREV";
             this._cCOLORPREV.Size = new System.Drawing.Size(56, 21);
             this._cCOLORPREV.TabIndex = 4;
@@ -478,13 +480,6 @@ namespace irRemote
             this._cmnuIKONKA.Name = "_cmnuIKONKA";
             this._cmnuIKONKA.Size = new System.Drawing.Size(145, 54);
             // 
-            // _cmnuzamknij
-            // 
-            this._cmnuzamknij.Name = "_cmnuzamknij";
-            this._cmnuzamknij.Size = new System.Drawing.Size(144, 22);
-            this._cmnuzamknij.Text = "Zamknij";
-            this._cmnuzamknij.Click += new System.EventHandler(this._cmnuzamknij_Click);
-            // 
             // _cmnushow
             // 
             this._cmnushow.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold);
@@ -498,40 +493,50 @@ namespace irRemote
             this.toolStripSeparator1.Name = "toolStripSeparator1";
             this.toolStripSeparator1.Size = new System.Drawing.Size(141, 6);
             // 
-            // _cpicTRYB
+            // _cmnuzamknij
             // 
-            this._cpicTRYB.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this._cpicTRYB.Location = new System.Drawing.Point(379, 20);
-            this._cpicTRYB.Name = "_cpicTRYB";
-            this._cpicTRYB.Size = new System.Drawing.Size(53, 50);
-            this._cpicTRYB.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
-            this._cpicTRYB.TabIndex = 22;
-            this._cpicTRYB.TabStop = false;
+            this._cmnuzamknij.Name = "_cmnuzamknij";
+            this._cmnuzamknij.Size = new System.Drawing.Size(144, 22);
+            this._cmnuzamknij.Text = "Zamknij";
+            this._cmnuzamknij.Click += new System.EventHandler(this._cmnuzamknij_Click);
+            // 
+            // _cbMINIMAL
+            // 
+            this._cbMINIMAL.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this._cbMINIMAL.Location = new System.Drawing.Point(316, 351);
+            this._cbMINIMAL.Name = "_cbMINIMAL";
+            this._cbMINIMAL.Size = new System.Drawing.Size(134, 24);
+            this._cbMINIMAL.TabIndex = 5;
+            this._cbMINIMAL.Text = "Start minimalized";
+            this._cbMINIMAL.UseVisualStyleBackColor = true;
+            this._cbMINIMAL.CheckedChanged += new System.EventHandler(this._cbMINIMAL_CheckedChanged);
             // 
             // frmMain
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(462, 394);
+            this.ClientSize = new System.Drawing.Size(462, 448);
+            this.Controls.Add(this._cbMINIMAL);
             this.Controls.Add(this._cCOLORPREV);
             this.Controls.Add(this._cOSDCOLOR);
             this.Controls.Add(this._cLabelKOL);
             this.Controls.Add(this._cGRUPA);
             this.Controls.Add(this._cSTRIP);
+            this.DoubleBuffered = true;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MaximizeBox = false;
             this.Name = "frmMain";
-            this.Text = "ir Remote";
+            this.Text = "Netflix/Plex IR Remote";
             this.Load += new System.EventHandler(this.frmMain_Load);
             this.Shown += new System.EventHandler(this.frmMain_Shown);
             this._cSTRIP.ResumeLayout(false);
             this._cSTRIP.PerformLayout();
             this._cGRUPA.ResumeLayout(false);
             this._cGRUPA.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this._cpicTRYB)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this._cSEPA)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this._cSEP)).EndInit();
             this._cmnuIKONKA.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this._cpicTRYB)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -574,6 +579,7 @@ namespace irRemote
         private System.Windows.Forms.ToolStripMenuItem _cmnushow;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
         private System.Windows.Forms.PictureBox _cpicTRYB;
+        private System.Windows.Forms.CheckBox _cbMINIMAL;
     }
 }
 

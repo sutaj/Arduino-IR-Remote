@@ -9,45 +9,85 @@
  *      ░   ▒   ░ ░░ ░  ▒ ░  ░ ░   
  *          ░  ░░  ░    ░      ░  ░
  *                                 
+ *      https://github.com/sutaj/Arduino-IR-Remote
  */
 
- /* FREE FOR NON COMMERCIAL USE ONLY ! */
+/* FREE FOR NON COMMERCIAL USE ONLY ! */
 
 using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
 using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
-using System.Management;
 using System.IO.Ports;
+using Microsoft.Win32;
 
 namespace irRemote
 {
     public partial class frmMain : Form
     {
+
+        #region SOME VARS
         PORTS PORT = new PORTS();
         NotifyIcon IKONA = new NotifyIcon();
         Timer TIK = new Timer();
         SerialPort sPORT = new SerialPort();
+        Image ico_NFlix, ico_Plex, ico_Mysz;
         string port=null;
+        int PL=0, MI=0; // fancy animation :P
+        #endregion
 
         public frmMain()
         {
             InitializeComponent();
 
-            TIK.Tick += TIKTAK;
+            #region events
             this.FormClosing += ZAMYKANIE;
+            TIK.Tick += TIKTAK;
             IKONA.DoubleClick += ICON_KLIK;
             IKONA.Disposed += FIXIKONA;
             sPORT.DataReceived += MonitorSerial;
+            #endregion
+
 
             IKONA.ContextMenuStrip = _cmnuIKONKA;
             sPORT.DtrEnable = true;
             sPORT.BaudRate = 9600;
+
+            ico_NFlix = new Bitmap(Properties.Resources.N_icon, 64, 64);
+            ico_Plex = new Bitmap(Properties.Resources.Plex_Logo, 64, 64);
+            ico_Mysz = new Bitmap(Properties.Resources.mouse, 64, 64);
+
+        }
+
+        private void frmMain_Load(object sender, EventArgs e)
+        {
+            IKONA.Text = STALE.TRAY_NAME;
+            IKONA.Icon = Properties.Resources.irremote;
+            IKONA.Visible = true;
+            _cSerialPort.Text = PORT.getPorts(STALE.DEVICE);
+            TIK.Interval = 250; // sprawdzamy co ćwierć sekundy / check every quarter of second
+            TIK.Start();
+            _cOSDCOLOR.SelectedIndex = 0;
+
+            Program.OSD_ICO = Properties.Resources.Plex_Logo;
+            Program.OSD_TXT = "LOADING...";
+
+            #region Load settings from registry
+            try
+            {
+                var s_min = Registry.GetValue(@"HKEY_CURRENT_USER\SOFTWARE\AKIL_IR_REMOTE",
+                                    "zminimalizowany", "false");
+
+                _cbMINIMAL.Checked = bool.Parse(s_min.ToString());
+            }
+            catch (Exception)
+            {
+            }
+
+            if (_cbMINIMAL.Checked)
+            {
+                this.WindowState = FormWindowState.Minimized;
+            }
+            #endregion
 
         }
 
@@ -77,6 +117,7 @@ namespace irRemote
                 {
                     R();
                     Program.OSD_TXT = "Mysz Wyłączona";
+                    //EN: Program.OSD_TXT = "Mouse is OFF";
                 }
             }
 
@@ -87,6 +128,7 @@ namespace irRemote
                 {
                     R();
                     Program.OSD_TXT = "Mysz Włączona";
+                    //EN: Program.OSD_TXT = "Mouse is ON";
                 }
             }
 
@@ -97,6 +139,7 @@ namespace irRemote
                 {
                     R();
                     Program.OSD_TXT = "Włączenie trybu\nN E T F L I X";
+                    //EN: Program.OSD_TXT = "N E T F L I X\nMode";
                 }
             }
 
@@ -107,6 +150,7 @@ namespace irRemote
                 {
                     R();
                     Program.OSD_TXT = "Włączenie trybu\nP L E X";
+                    //EN: Program.OSD_TXT = "P L E X\nMode";
                 }
             }
 
@@ -122,12 +166,13 @@ namespace irRemote
                 }
             }
 
-            if (line.Contains(STALE.AUTO)) /* kod przycisków myszy jest wysyłany tylko w przypadku pracy w trybie myszki. nie trzeba sprawdzać softwareowo */
+            if (line.Contains(STALE.AUTO))
             {
                 if (_cbAUTO.Checked)
                 {
                     R();
                     Program.OSD_TXT = "LEWE kliknięcie";
+                    //EN: Program.OSD_TXT = "LEFT mouse click";
                 }
             }
 
@@ -137,6 +182,7 @@ namespace irRemote
                 {
                     R();
                     Program.OSD_TXT = "PRAWE kliknięcie";
+                    //EN: Program.OSD_TXT = "RIGHT mouse click";
                 }
             }
 
@@ -146,6 +192,7 @@ namespace irRemote
                 {
                     R();
                     Program.OSD_TXT = "Wyciszenie";
+                    //EN: Program.OSD_TXT = "Mute";
                 }
             }
 
@@ -154,7 +201,8 @@ namespace irRemote
                 if (_cbPRAWO.Checked)
                 {
                     R();
-                    Program.OSD_TXT = ">>> Przewiń do przodu";
+                    Program.OSD_TXT = ">> Przewiń do przodu";
+                    //EN: Program.OSD_TXT = ">> Seek forward";
                 }
             }
 
@@ -163,7 +211,8 @@ namespace irRemote
                 if (_cbLEWO.Checked)
                 {
                     R();
-                    Program.OSD_TXT = "<<< Przewiń do tyłu";
+                    Program.OSD_TXT = "<< Przewiń do tyłu";
+                    //EN: Program.OSD_TXT = "<< Rewind";
                 }
             }
 
@@ -173,6 +222,7 @@ namespace irRemote
                 {
                     R();
                     Program.OSD_TXT = "Wstrzymaj / Wznów";
+                    //EN: Program.OSD_TXT = "Play / Pause";
                 }
             }
 
@@ -181,7 +231,8 @@ namespace irRemote
                 if (_cbVOLUP.Checked)
                 {
                     R();
-                    Program.OSD_TXT = "Głośność +";
+                    Program.OSD_TXT = string.Format("Głośność {0}", PLUSY());
+                    //EN: Program.OSD_TXT = string.Format("Volume {0}", PLUSY());
                 }
             }
 
@@ -190,7 +241,8 @@ namespace irRemote
                 if (_cbVOLDW.Checked)
                 {
                     R();
-                    Program.OSD_TXT = "Głośność -";
+                    Program.OSD_TXT = string.Format("Głośność {0}", MINUSY());
+                    //EN: Program.OSD_TXT = string.Format("Volume {0}", MINUSY());
                 }
             }
 
@@ -199,7 +251,8 @@ namespace irRemote
                 if (_cbSPEED.Checked)
                 {
                     R();
-                    Program.OSD_TXT = string.Format("Prędkość myszki\n[ {0}px ]", new StringBuilder(line.Remove(0, 2)).Length-1 );
+                    Program.OSD_TXT = string.Format("Prędkość myszki\npx + {0}", line.Replace("\n", "" ));
+                    //EN: Program.OSD_TXT = string.Format("Mouse Speed\npx + {0}", line.Replace("\n", "" ));
                 }
             }
 
@@ -208,7 +261,8 @@ namespace irRemote
                 if (_cbCHUP.Checked)
                 {
                     R();
-                    Program.OSD_TXT = "Następny w kolejce";
+                    Program.OSD_TXT = "Następny odcinek";
+                    //EN: Program.OSD_TXT = "Next episode";
                 }
             }
 
@@ -217,7 +271,8 @@ namespace irRemote
                 if (_cbCHDW.Checked)
                 {
                     R();
-                    Program.OSD_TXT = "Poprzedni z kolejki";
+                    Program.OSD_TXT = "Poprzedni odcinek";
+                    //EN: Program.OSD_TXT = "Previous episode";
                 }
             }
 
@@ -227,15 +282,7 @@ namespace irRemote
                 {
                     R();
                     Program.OSD_TXT = "Pełny ekran WŁ/WYŁ";
-                }
-            }
-
-            if (line.Contains(STALE.CHUP))
-            {
-                if (_cbCHUP.Checked)
-                {
-                    R();
-                    Program.OSD_TXT = "Następny w kolejce";
+                    //EN: Program.OSD_TXT = "Toggle\nFull Screepn";
                 }
             }
 
@@ -244,38 +291,52 @@ namespace irRemote
                 if (line.Contains(STALE.B0))
                 {
                     Program.OSD_TXT = "Przycisk 0";
+                    //EN: Program.OSD_TXT = "Button 0";
                 }
                 if (line.Contains(STALE.B1))
                 {
                     Program.OSD_TXT = "Przycisk 1";
+                    //EN: Program.OSD_TXT = "Button 1";
+                }
+                if (line.Contains(STALE.B2))
+                {
+                    Program.OSD_TXT = "Przycisk 2";
+                    //EN: Program.OSD_TXT = "Button 2";
                 }
                 if (line.Contains(STALE.B3))
                 {
                     Program.OSD_TXT = "Przycisk 3";
+                    //EN: Program.OSD_TXT = "Button 3";
                 }
                 if (line.Contains(STALE.B4))
                 {
                     Program.OSD_TXT = "Przycisk 4";
+                    //EN: Program.OSD_TXT = "Button 4";
                 }
                 if (line.Contains(STALE.B5))
                 {
                     Program.OSD_TXT = "Przycisk 5";
+                    //EN: Program.OSD_TXT = "Button 5";
                 }
                 if (line.Contains(STALE.B6))
                 {
-                    Program.OSD_TXT = "Przycisk ";
+                    Program.OSD_TXT = "Przycisk 6";
+                    //EN: Program.OSD_TXT = "Button 6";
                 }
                 if (line.Contains(STALE.B7))
                 {
                     Program.OSD_TXT = "Przycisk 7";
+                    //EN: Program.OSD_TXT = "Button 7";
                 }
                 if (line.Contains(STALE.B8))
                 {
                     Program.OSD_TXT = "Przycisk 8";
+                    //EN: Program.OSD_TXT = "Button 8";
                 }
                 if (line.Contains(STALE.B9))
                 {
                     Program.OSD_TXT = "Przycisk 9";
+                    //EN: Program.OSD_TXT = "Button 9";
                 }
                 R();
             }
@@ -286,6 +347,7 @@ namespace irRemote
                 {
                     R();
                     Program.OSD_TXT = "Wyzwolenie akcji przycisku\nC Z E R W O N Y";
+                    //EN: Program.OSD_TXT = "Action under\nR E D";
                 }
             }
 
@@ -295,6 +357,7 @@ namespace irRemote
                 {
                     R();
                     Program.OSD_TXT = "Wyzwolenie akcji przycisku\nZ I E L O N Y";
+                    //EN: Program.OSD_TXT = "Action under\nG R E E N";
                 }
             }
 
@@ -304,6 +367,7 @@ namespace irRemote
                 {
                     R();
                     Program.OSD_TXT = "Wyzwolenie akcji przycisku\nŻ Ó Ł T Y";
+                    //EN: Program.OSD_TXT = "Action under\nY E L L O W";
                 }
             }
 
@@ -313,6 +377,7 @@ namespace irRemote
                 {
                     R();
                     Program.OSD_TXT = "Wyzwolenie akcji przycisku\nN I E B I E S K I";
+                    //EN: Program.OSD_TXT = "Action under\nB L U E";
                 }
             }
             #endregion
@@ -322,6 +387,9 @@ namespace irRemote
             {
                 if (this.WindowState == FormWindowState.Minimized)
                 {
+                    R();
+                    Program.OSD_TXT = "Pokazuję program...";
+                    //EN: Program.OSD_TXT = "Showing program...";
                     SHOW();
                 }
             }
@@ -343,6 +411,7 @@ namespace irRemote
         private void ZAMYKANIE(object sender, FormClosingEventArgs e)
         {
             /* Problem w tym, że ikona się zawiesza przy wyjściu. Czyścimy ręcznie */
+            /* Bugfix for notyfiicon */
             IKONA.Icon = null;
             IKONA.Dispose();
             Application.DoEvents();
@@ -350,58 +419,55 @@ namespace irRemote
 
         private void TIKTAK(object sender, EventArgs e)
         {
-            if (Program.MYSZ)
+            #region DO STUFF
+            try
             {
-                Program.OSD_ICO = Properties.Resources.mouse;
-            }
-            else
-            {
-                if (Program.TRYB == "netflix")
+                if (Program.MYSZ)
                 {
-                    Program.OSD_ICO = Properties.Resources.N_icon;
+                    Program.OSD_ICO = ico_Mysz;
+                    IKONA.Icon = Icon.FromHandle(Properties.Resources.mouse.GetHicon());
                 }
                 else
                 {
-                    Program.OSD_ICO = Properties.Resources.Plex_Logo;
+                    if (Program.TRYB == "netflix")
+                    {
+                        Program.OSD_ICO = ico_NFlix;
+                    }
+                    else
+                    {
+                        Program.OSD_ICO = ico_Plex;
+                    }
+                    IKONA.Icon = Properties.Resources.irremote;
                 }
-            }
 
-            port = PORT.getPorts(STALE.DEVICE);
-            if (port != null)
-            {
-                _cSerialPort.Text = PORT.getPorts(STALE.DEVICE);
-                if (!sPORT.IsOpen)
+                port = PORT.getPorts(STALE.DEVICE);
+                if (port != null)
                 {
-                    sPORT.PortName = port;
-                    sPORT.Open();
-                    sPORT.Write("T");
-                    System.Threading.Thread.Sleep(300);
-                    sPORT.Write("M");
+                    _cSerialPort.Text = PORT.getPorts(STALE.DEVICE);
+                    if (!sPORT.IsOpen)
+                    {
+                        sPORT.PortName = port;
+                        sPORT.Open();
+                        sPORT.Write("T");
+                        System.Threading.Thread.Sleep(300);
+                        sPORT.Write("M");
+                    }
                 }
+                else
+                {
+                    _cSerialPort.Text = "Odłączony";
+                    //EN: _cSerialPort.Text = "Disconnected";
+                }
+                if (this.WindowState == FormWindowState.Minimized)
+                {
+                    this.Hide();
+                }
+                _cpicTRYB.Image = Program.OSD_ICO;
             }
-            else
+            catch (Exception)
             {
-                _cSerialPort.Text = "Odłączony";
             }
-            if(this.WindowState == FormWindowState.Minimized)
-            {
-                this.Hide();
-            }
-            _cpicTRYB.Image = Program.OSD_ICO;
-        }
-
-        private void frmMain_Load(object sender, EventArgs e)
-        {
-            IKONA.Text = "Pilot USB";
-            IKONA.Icon = Properties.Resources.irremote;
-            IKONA.Visible = true;
-            _cSerialPort.Text = PORT.getPorts(STALE.DEVICE);
-            TIK.Interval = 250; // sprawdzamy co ćwierć sekundy
-            TIK.Start();
-            _cOSDCOLOR.SelectedIndex = 0;
-
-            Program.OSD_ICO = Properties.Resources.Plex_Logo;
-            Program.OSD_TXT = "Testowy\ntekst...";
+            #endregion
 
         }
 
@@ -410,39 +476,39 @@ namespace irRemote
         {
             switch (_cOSDCOLOR.Text)
             {
-                case "Biały":
+                case "White":
                     Program.OSD_COLOR = STALE.KOLOR.BIALY;
                     break;
 
-                case "Czarny":
+                case "Black":
                     Program.OSD_COLOR = STALE.KOLOR.CZARNY;
                     break;
 
-                case "Szary":
+                case "Grey":
                     Program.OSD_COLOR = STALE.KOLOR.SZARY;
                     break;
 
-                case "Niebieski":
+                case "Blue":
                     Program.OSD_COLOR = STALE.KOLOR.NIEBESKI;
                     break;
 
-                case "Zółty":
+                case "Yellow":
                     Program.OSD_COLOR = STALE.KOLOR.ZOLTY;
                     break;
 
-                case "Czerwony":
+                case "Red":
                     Program.OSD_COLOR = STALE.KOLOR.CZERWONY;
                     break;
 
-                case "Zielony":
+                case "Green":
                     Program.OSD_COLOR = STALE.KOLOR.ZIELONY;
                     break;
 
-                case "Fioletowy":
+                case "Purple":
                     Program.OSD_COLOR = STALE.KOLOR.FIOLETOWY;
                     break;
 
-                case "Błękitny":
+                case "Azure":
                     Program.OSD_COLOR = STALE.KOLOR.BLEKITNY;
                     break;
 
@@ -470,6 +536,11 @@ namespace irRemote
             Application.Exit();
         }
 
+        private void _cbMINIMAL_CheckedChanged(object sender, EventArgs e)
+        {
+            Registry.SetValue(@"HKEY_CURRENT_USER\SOFTWARE\AKIL_IR_REMOTE", "zminimalizowany", _cbMINIMAL.Checked);
+        }
+
         private void _cCOLORPREV_Click(object sender, EventArgs e)
         {
             Program.Animating = true;
@@ -479,6 +550,50 @@ namespace irRemote
         {
             SHOW();
         }
+
+        #region fancy shit
+        string PLUSY()
+        {
+            string ret = null;
+            PL++;
+            if (PL == 1)
+            {
+                ret = "+";
+            }
+            if (PL == 2)
+            {
+                ret = "++";
+            }
+            if (PL == 3)
+            {
+                ret = "+++";
+                PL = 0;
+            }
+
+            return ret;
+        }
+
+        string MINUSY()
+        {
+            string ret = null;
+            MI++;
+            if (MI == 1)
+            {
+                ret = "-";
+            }
+            if (MI == 2)
+            {
+                ret = "--";
+            }
+            if (MI == 3)
+            {
+                ret = "---";
+                MI = 0;
+            }
+
+            return ret;
+        }
+        #endregion
     }
 
 }
