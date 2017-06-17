@@ -1,15 +1,16 @@
-﻿/***
- *     ▄▄▄       ██ ▄█▀ ██▓ ██▓    
- *    ▒████▄     ██▄█▒ ▓██▒▓██▒    
- *    ▒██  ▀█▄  ▓███▄░ ▒██▒▒██░    
- *    ░██▄▄▄▄██ ▓██ █▄ ░██░▒██░    
- *     ▓█   ▓██▒▒██▒ █▄░██░░██████▒
- *     ▒▒   ▓▒█░▒ ▒▒ ▓▒░▓  ░ ▒░▓  ░
- *      ▒   ▒▒ ░░ ░▒ ▒░ ▒ ░░ ░ ▒  ░
- *      ░   ▒   ░ ░░ ░  ▒ ░  ░ ░   
- *          ░  ░░  ░    ░      ░  ░
- *                                 
- */
+﻿using System.Resources;
+/***
+*     ▄▄▄       ██ ▄█▀ ██▓ ██▓    
+*    ▒████▄     ██▄█▒ ▓██▒▓██▒    
+*    ▒██  ▀█▄  ▓███▄░ ▒██▒▒██░    
+*    ░██▄▄▄▄██ ▓██ █▄ ░██░▒██░    
+*     ▓█   ▓██▒▒██▒ █▄░██░░██████▒
+*     ▒▒   ▓▒█░▒ ▒▒ ▓▒░▓  ░ ▒░▓  ░
+*      ▒   ▒▒ ░░ ░▒ ▒░ ▒ ░░ ░ ▒  ░
+*      ░   ▒   ░ ░░ ░  ▒ ░  ░ ░   
+*          ░  ░░  ░    ░      ░  ░
+*                                 
+*/
 using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
@@ -22,8 +23,8 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("AKIL")]
 [assembly: AssemblyProduct("irRemote")]
-[assembly: AssemblyCopyright("Copyright © AKIL 2017")]
-[assembly: AssemblyTrademark("")]
+[assembly: AssemblyCopyright("Copyright © Przemysław Wróblewski AKIL 2017")]
+[assembly: AssemblyTrademark("FREE FOR NON COMMERCIAL USE ONLY !")]
 [assembly: AssemblyCulture("")]
 
 // Ustawienie elementu ComVisible na wartość false sprawia, że typy w tym zestawie są niewidoczne
@@ -44,5 +45,7 @@ using System.Runtime.InteropServices;
 // Możesz określić wszystkie wartości lub użyć domyślnych numerów kompilacji i poprawki
 // przy użyciu symbolu „*”, tak jak pokazano poniżej:
 // [assembly: AssemblyVersion("1.0.*")]
-[assembly: AssemblyVersion("0.5.0.0")]
-[assembly: AssemblyFileVersion("0.5.0.0")]
+[assembly: AssemblyVersion("1.1.0.0")]
+[assembly: AssemblyFileVersion("1.1.0.0")]
+[assembly: NeutralResourcesLanguage("")]
+
