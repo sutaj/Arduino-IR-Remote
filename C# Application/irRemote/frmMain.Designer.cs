@@ -45,6 +45,11 @@ namespace irRemote
             this._cSTRIP = new System.Windows.Forms.StatusStrip();
             this._cPORTLABEL = new System.Windows.Forms.ToolStripStatusLabel();
             this._cSerialPort = new System.Windows.Forms.ToolStripStatusLabel();
+            this._ctSEP = new System.Windows.Forms.ToolStripStatusLabel();
+            this._cPortSettMnu = new System.Windows.Forms.ToolStripDropDownButton();
+            this._cMnuSerialSTOP = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
+            this._cMnuSerialSTART = new System.Windows.Forms.ToolStripMenuItem();
             this._cGRUPA = new System.Windows.Forms.GroupBox();
             this._cpicTRYB = new System.Windows.Forms.PictureBox();
             this._cbBLUE = new System.Windows.Forms.CheckBox();
@@ -78,6 +83,9 @@ namespace irRemote
             this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
             this._cmnuzamknij = new System.Windows.Forms.ToolStripMenuItem();
             this._cbMINIMAL = new System.Windows.Forms.CheckBox();
+            this._cPortSPEED = new System.Windows.Forms.ComboBox();
+            this._cLanguage = new System.Windows.Forms.ComboBox();
+            this._cLABELLang = new System.Windows.Forms.Label();
             this._cSTRIP.SuspendLayout();
             this._cGRUPA.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this._cpicTRYB)).BeginInit();
@@ -90,7 +98,10 @@ namespace irRemote
             // 
             this._cSTRIP.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this._cPORTLABEL,
-            this._cSerialPort});
+            this._cSerialPort,
+            this._ctSEP,
+            this._cPortSettMnu});
+            this._cSTRIP.LayoutStyle = System.Windows.Forms.ToolStripLayoutStyle.HorizontalStackWithOverflow;
             this._cSTRIP.Location = new System.Drawing.Point(0, 426);
             this._cSTRIP.Name = "_cSTRIP";
             this._cSTRIP.Size = new System.Drawing.Size(462, 22);
@@ -107,6 +118,47 @@ namespace irRemote
             // 
             this._cSerialPort.Name = "_cSerialPort";
             this._cSerialPort.Size = new System.Drawing.Size(0, 17);
+            // 
+            // _ctSEP
+            // 
+            this._ctSEP.Enabled = false;
+            this._ctSEP.Name = "_ctSEP";
+            this._ctSEP.Padding = new System.Windows.Forms.Padding(10, 0, 10, 0);
+            this._ctSEP.Size = new System.Drawing.Size(36, 17);
+            this._ctSEP.Text = " | ";
+            // 
+            // _cPortSettMnu
+            // 
+            this._cPortSettMnu.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this._cPortSettMnu.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this._cMnuSerialSTOP,
+            this.toolStripSeparator2,
+            this._cMnuSerialSTART});
+            this._cPortSettMnu.Image = global::irRemote.Properties.Resources._Settings;
+            this._cPortSettMnu.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this._cPortSettMnu.Name = "_cPortSettMnu";
+            this._cPortSettMnu.Size = new System.Drawing.Size(29, 20);
+            this._cPortSettMnu.Text = "toolStripDropDownButton1";
+            this._cPortSettMnu.ToolTipText = "This options are litte buggy";
+            // 
+            // _cMnuSerialSTOP
+            // 
+            this._cMnuSerialSTOP.Name = "_cMnuSerialSTOP";
+            this._cMnuSerialSTOP.Size = new System.Drawing.Size(194, 22);
+            this._cMnuSerialSTOP.Text = "Stop Serial Connection";
+            this._cMnuSerialSTOP.Click += new System.EventHandler(this._cMnuSerialSTOP_Click);
+            // 
+            // toolStripSeparator2
+            // 
+            this.toolStripSeparator2.Name = "toolStripSeparator2";
+            this.toolStripSeparator2.Size = new System.Drawing.Size(191, 6);
+            // 
+            // _cMnuSerialSTART
+            // 
+            this._cMnuSerialSTART.Name = "_cMnuSerialSTART";
+            this._cMnuSerialSTART.Size = new System.Drawing.Size(194, 22);
+            this._cMnuSerialSTART.Text = "Start Serial Connection";
+            this._cMnuSerialSTART.Click += new System.EventHandler(this._cMnuSerialSTART_Click);
             // 
             // _cGRUPA
             // 
@@ -377,7 +429,7 @@ namespace irRemote
             this._cSEPA.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this._cSEPA.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
-            this._cSEPA.Location = new System.Drawing.Point(15, 261);
+            this._cSEPA.Location = new System.Drawing.Point(15, 267);
             this._cSEPA.Name = "_cSEPA";
             this._cSEPA.Size = new System.Drawing.Size(401, 4);
             this._cSEPA.TabIndex = 3;
@@ -478,26 +530,26 @@ namespace irRemote
             this.toolStripSeparator1,
             this._cmnuzamknij});
             this._cmnuIKONKA.Name = "_cmnuIKONKA";
-            this._cmnuIKONKA.Size = new System.Drawing.Size(145, 54);
+            this._cmnuIKONKA.Size = new System.Drawing.Size(157, 54);
             // 
             // _cmnushow
             // 
             this._cmnushow.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold);
             this._cmnushow.Name = "_cmnushow";
-            this._cmnushow.Size = new System.Drawing.Size(144, 22);
-            this._cmnushow.Text = "Konfiguracja";
+            this._cmnushow.Size = new System.Drawing.Size(156, 22);
+            this._cmnushow.Text = "Show program";
             this._cmnushow.Click += new System.EventHandler(this._cmnushow_Click);
             // 
             // toolStripSeparator1
             // 
             this.toolStripSeparator1.Name = "toolStripSeparator1";
-            this.toolStripSeparator1.Size = new System.Drawing.Size(141, 6);
+            this.toolStripSeparator1.Size = new System.Drawing.Size(153, 6);
             // 
             // _cmnuzamknij
             // 
             this._cmnuzamknij.Name = "_cmnuzamknij";
-            this._cmnuzamknij.Size = new System.Drawing.Size(144, 22);
-            this._cmnuzamknij.Text = "Zamknij";
+            this._cmnuzamknij.Size = new System.Drawing.Size(156, 22);
+            this._cmnuzamknij.Text = "Exit";
             this._cmnuzamknij.Click += new System.EventHandler(this._cmnuzamknij_Click);
             // 
             // _cbMINIMAL
@@ -511,11 +563,61 @@ namespace irRemote
             this._cbMINIMAL.UseVisualStyleBackColor = true;
             this._cbMINIMAL.CheckedChanged += new System.EventHandler(this._cbMINIMAL_CheckedChanged);
             // 
+            // _cPortSPEED
+            // 
+            this._cPortSPEED.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this._cPortSPEED.FormattingEnabled = true;
+            this._cPortSPEED.Items.AddRange(new object[] {
+            "300",
+            "600",
+            "1200",
+            "2400",
+            "4800",
+            "9600",
+            "14400",
+            "19200",
+            "28800",
+            "38400",
+            "57600",
+            "115200"});
+            this._cPortSPEED.Location = new System.Drawing.Point(337, 427);
+            this._cPortSPEED.Name = "_cPortSPEED";
+            this._cPortSPEED.Size = new System.Drawing.Size(98, 21);
+            this._cPortSPEED.TabIndex = 6;
+            this._cPortSPEED.SelectedIndexChanged += new System.EventHandler(this._cPortSPEED_SelectedIndexChanged);
+            // 
+            // _cLanguage
+            // 
+            this._cLanguage.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this._cLanguage.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this._cLanguage.FormattingEnabled = true;
+            this._cLanguage.Items.AddRange(new object[] {
+            "Polish",
+            "English"});
+            this._cLanguage.Location = new System.Drawing.Point(99, 353);
+            this._cLanguage.Name = "_cLanguage";
+            this._cLanguage.Size = new System.Drawing.Size(143, 21);
+            this._cLanguage.TabIndex = 7;
+            this._cLanguage.SelectedValueChanged += new System.EventHandler(this._cLanguage_SelectedValueChanged);
+            // 
+            // _cLABELLang
+            // 
+            this._cLABELLang.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this._cLABELLang.AutoSize = true;
+            this._cLABELLang.Location = new System.Drawing.Point(13, 356);
+            this._cLABELLang.Name = "_cLABELLang";
+            this._cLABELLang.Size = new System.Drawing.Size(55, 13);
+            this._cLABELLang.TabIndex = 8;
+            this._cLABELLang.Text = "Language";
+            // 
             // frmMain
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(462, 448);
+            this.Controls.Add(this._cLABELLang);
+            this.Controls.Add(this._cLanguage);
+            this.Controls.Add(this._cPortSPEED);
             this.Controls.Add(this._cbMINIMAL);
             this.Controls.Add(this._cCOLORPREV);
             this.Controls.Add(this._cOSDCOLOR);
@@ -580,6 +682,14 @@ namespace irRemote
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
         private System.Windows.Forms.PictureBox _cpicTRYB;
         private System.Windows.Forms.CheckBox _cbMINIMAL;
+        private System.Windows.Forms.ComboBox _cPortSPEED;
+        private System.Windows.Forms.ToolStripStatusLabel _ctSEP;
+        private System.Windows.Forms.ToolStripDropDownButton _cPortSettMnu;
+        private System.Windows.Forms.ToolStripMenuItem _cMnuSerialSTOP;
+        private System.Windows.Forms.ToolStripSeparator toolStripSeparator2;
+        private System.Windows.Forms.ToolStripMenuItem _cMnuSerialSTART;
+        private System.Windows.Forms.ComboBox _cLanguage;
+        private System.Windows.Forms.Label _cLABELLang;
     }
 }
 

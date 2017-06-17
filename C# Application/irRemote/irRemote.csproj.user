@@ -10,4 +10,10 @@
     <FallbackCulture>pl-PL</FallbackCulture>
     <VerifyUploadedFiles>false</VerifyUploadedFiles>
   </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|AnyCPU'">
+    <StartAction>Project</StartAction>
+    <StartProgram>C:\Windows\System32\cmd.exe</StartProgram>
+    <StartWorkingDirectory>C:\Users\Akil\Documents\Visual Studio 2017\Projects\irRemote\irRemote\bin\Release\</StartWorkingDirectory>
+    <StartArguments>xcopy /s /y "C:\Users\Akil\Documents\Visual Studio 2017\Projects\irRemote\irRemote\bin\Release\irRemote.exe" "C:\Users\Akil\Desktop\irRemote.exe"</StartArguments>
+  </PropertyGroup>
 </Project>

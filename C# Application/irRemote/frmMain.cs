@@ -26,13 +26,19 @@ namespace irRemote
     {
 
         #region SOME VARS
+        frmOSD fOSD = new frmOSD();
         PORTS PORT = new PORTS();
         NotifyIcon IKONA = new NotifyIcon();
         Timer TIK = new Timer();
         SerialPort sPORT = new SerialPort();
         Image ico_NFlix, ico_Plex, ico_Mysz;
-        string port=null;
+        string port=null, GODZ=null;
         int PL=0, MI=0; // fancy animation :P
+        LANG.Language LNG;
+        string LABEL_Disconnected, OSD_Loading, OSD_ModeOn, OSD_ModeOff, OSD_MouseOn, OSD_MouseOff, OSD_Power, OSD_Auto, OSD_Input, OSD_Mute,
+               OSD_Right, OSD_Left, OSD_Enter, OSD_VolUp, OSD_VolDw, OSD_ChUp, OSD_ChDw, OSD_Exit, OSD_Red, OSD_Green, OSD_911,
+               OSD_Yellow, OSD_Blue, OSD_0, OSD_1, OSD_2, OSD_3, OSD_4, OSD_5, OSD_6, OSD_7, OSD_8, OSD_9, OSD_Time, OSD_MSpeed; // fckin hell ! 
+
         #endregion
 
         public frmMain()
@@ -47,7 +53,6 @@ namespace irRemote
             sPORT.DataReceived += MonitorSerial;
             #endregion
 
-
             IKONA.ContextMenuStrip = _cmnuIKONKA;
             sPORT.DtrEnable = true;
             sPORT.BaudRate = 9600;
@@ -56,31 +61,48 @@ namespace irRemote
             ico_Plex = new Bitmap(Properties.Resources.Plex_Logo, 64, 64);
             ico_Mysz = new Bitmap(Properties.Resources.mouse, 64, 64);
 
-        }
-
-        private void frmMain_Load(object sender, EventArgs e)
-        {
-            IKONA.Text = STALE.TRAY_NAME;
-            IKONA.Icon = Properties.Resources.irremote;
-            IKONA.Visible = true;
-            _cSerialPort.Text = PORT.getPorts(STALE.DEVICE);
-            TIK.Interval = 250; // sprawdzamy co ćwierć sekundy / check every quarter of second
-            TIK.Start();
-            _cOSDCOLOR.SelectedIndex = 0;
-
-            Program.OSD_ICO = Properties.Resources.Plex_Logo;
-            Program.OSD_TXT = "LOADING...";
 
             #region Load settings from registry
             try
             {
+                var lng = Registry.GetValue(@"HKEY_CURRENT_USER\SOFTWARE\AKIL_IR_REMOTE",
+                                    "jezyk", LANG.Language.English);
+
                 var s_min = Registry.GetValue(@"HKEY_CURRENT_USER\SOFTWARE\AKIL_IR_REMOTE",
                                     "zminimalizowany", "false");
 
+                var s_rate = Registry.GetValue(@"HKEY_CURRENT_USER\SOFTWARE\AKIL_IR_REMOTE",
+                                    "speed", null);
+
                 _cbMINIMAL.Checked = bool.Parse(s_min.ToString());
+                _cPortSPEED.SelectedText = s_rate.ToString();
+
+                switch (lng)
+                {
+                    case "Polish":
+                        LNG = LANG.Language.Polish;
+                        ChangeLanguage(LANG.Language.Polish);
+                        break;
+                    case "English":
+                    default:
+                        LNG = LANG.Language.English;
+                        ChangeLanguage(LANG.Language.English);
+                        break;
+                }
+
+                ChangeLanguage(LNG);
+                if (LNG == LANG.Language.Polish)
+                {
+                    _cLanguage.SelectedIndex = 0;
+                }
+                else
+                {
+                    _cLanguage.SelectedIndex = 1;
+                }
             }
             catch (Exception)
             {
+                _cPortSPEED.SelectedIndex = 5;
             }
 
             if (_cbMINIMAL.Checked)
@@ -89,13 +111,31 @@ namespace irRemote
             }
             #endregion
 
+            System.Threading.Thread.Sleep(1000);
         }
 
-        private void MonitorSerial(object sender, SerialDataReceivedEventArgs e)
+        private void frmMain_Load(object sender, EventArgs e)
         {
-            string line = sPORT.ReadLine();
-            this.BeginInvoke(new LineReceivedEvent(LineReceived), line);
+            string _dbg = null;
+            #region dbg
+#if DEBUG
+            _dbg = " - DEBUG";
+#endif
+            #endregion
+
+            IKONA.Text = string.Format("{0}{1}", STALE.TRAY_NAME, _dbg);
+            IKONA.Icon = Properties.Resources.irremote;
+            IKONA.Visible = true;
+            _cSerialPort.Text = PORT.getPorts(STALE.DEVICE);
+            TIK.Interval = 250; // sprawdzamy co ćwierć sekundy / check every quarter of second
+            TIK.Start();
+            _cOSDCOLOR.SelectedIndex = 0;
+
+            Program.OSD_ICO = Properties.Resources.Plex_Logo;
+            Program.OSD_TXT = OSD_Loading;
+
         }
+
 
         /// <summary>
         /// Show osd
@@ -106,320 +146,335 @@ namespace irRemote
             Program.TimeOut = 0;
         }
 
+
+        #region Monitor device port
+        private void MonitorSerial(object sender, SerialDataReceivedEventArgs e)
+        {
+            if (sPORT.IsOpen)
+            {
+                string line = sPORT.ReadLine().TrimEnd('\n').TrimEnd('\r');
+                this.BeginInvoke(new LineReceivedEvent(LineReceived), line);
+            }
+        }
+
         private delegate void LineReceivedEvent(string line);
+
         private void LineReceived(string line)
         {
-            #region Wykrywanie trybu
-            if (line.Contains(STALE.MYSZ_OFF))
+            switch (line)
             {
-                Program.MYSZ = false;
-                if (_cbMYSZ.Checked)
-                {
-                    R();
-                    Program.OSD_TXT = "Mysz Wyłączona";
-                    //EN: Program.OSD_TXT = "Mouse is OFF";
-                }
-            }
+                #region Mode detection
+                case STALE.CODES.MYSZ_OFF:
+                    if(_cbMYSZ.Checked == true)
+                    {
+                        Program.MYSZ = false;
+                        Program.OSD_TXT = OSD_MouseOff;
+                        R();
+                    }
+                    break;
 
-            if (line.Contains(STALE.MYSZ_ON))
-            {
-                Program.MYSZ = true;
-                if (_cbMYSZ.Checked)
-                {
-                    R();
-                    Program.OSD_TXT = "Mysz Włączona";
-                    //EN: Program.OSD_TXT = "Mouse is ON";
-                }
-            }
+                case STALE.CODES.MYSZ_ON:
+                    if (_cbMYSZ.Checked == true)
+                    {
+                        Program.MYSZ = true;
+                        Program.OSD_TXT = OSD_MouseOn;
+                        R();
+                    }
+                    break;
 
-            if (line.Contains(STALE.TRYB_ON))
-            {
-                Program.TRYB = "netflix";
-                if (_cbTRYB.Checked)
-                {
-                    R();
-                    Program.OSD_TXT = "Włączenie trybu\nN E T F L I X";
-                    //EN: Program.OSD_TXT = "N E T F L I X\nMode";
-                }
-            }
+                case STALE.CODES.TRYB_ON:
+                    if (_cbTRYB.Checked == true)
+                    {
+                        Program.OSD_TXT = OSD_ModeOn;
+                        Program.TRYB = "netflix";
+                        R();
+                    }
+                    break;
 
-            if (line.Contains(STALE.TRYB_OFF))
-            {
-                Program.TRYB = "plex";
-                if (_cbTRYB.Checked)
-                {
-                    R();
-                    Program.OSD_TXT = "Włączenie trybu\nP L E X";
-                    //EN: Program.OSD_TXT = "P L E X\nMode";
-                }
-            }
+                case STALE.CODES.TRYB_OFF:
+                    if (_cbTRYB.Checked == true)
+                    {
+                        Program.OSD_TXT = OSD_ModeOff;
+                        Program.TRYB = "plex";
+                        R();
+                    }
+                    break;
 
-            #endregion
+                #endregion
 
-            #region Przyciski
-            if (line.Contains(STALE.POWER))
-            {
-                if (_cbPOWER.Checked)
-                {
-                    R();
-                    Program.OSD_TXT = "Escape";
-                }
-            }
+                #region Buttons
 
-            if (line.Contains(STALE.AUTO))
-            {
-                if (_cbAUTO.Checked)
-                {
-                    R();
-                    Program.OSD_TXT = "LEWE kliknięcie";
-                    //EN: Program.OSD_TXT = "LEFT mouse click";
-                }
-            }
+                case STALE.CODES.POWER:
+                    if (_cbPOWER.Checked == true)
+                    {
+                        Program.OSD_TXT = OSD_Power;
+                        R();
+                    }
+                    break;
 
-            if (line.Contains(STALE.INPUT))
-            {
-                if (_cbINPUT.Checked)
-                {
-                    R();
-                    Program.OSD_TXT = "PRAWE kliknięcie";
-                    //EN: Program.OSD_TXT = "RIGHT mouse click";
-                }
-            }
+                case STALE.CODES.AUTO:
+                    if (_cbAUTO.Checked == true)
+                    {
+                        Program.OSD_TXT = OSD_Auto;
+                        R();
+                    }
+                    break;
 
-            if (line.Contains(STALE.MUTE))
-            {
-                if (_cbMUTE.Checked)
-                {
-                    R();
-                    Program.OSD_TXT = "Wyciszenie";
-                    //EN: Program.OSD_TXT = "Mute";
-                }
-            }
+                case STALE.CODES.INPUT:
+                    if (_cbINPUT.Checked == true)
+                    {
+                        Program.OSD_TXT = OSD_Input;
+                        R();
+                    }
+                    break;
 
-            if (line.Contains(STALE.PRAWO))
-            {
-                if (_cbPRAWO.Checked)
-                {
-                    R();
-                    Program.OSD_TXT = ">> Przewiń do przodu";
-                    //EN: Program.OSD_TXT = ">> Seek forward";
-                }
-            }
+                case STALE.CODES.MUTE:
+                    if (_cbMUTE.Checked == true)
+                    {
+                        Program.OSD_TXT = OSD_Mute;
+                        R();
+                    }
+                    break;
 
-            if (line.Contains(STALE.LEWO))
-            {
-                if (_cbLEWO.Checked)
-                {
-                    R();
-                    Program.OSD_TXT = "<< Przewiń do tyłu";
-                    //EN: Program.OSD_TXT = "<< Rewind";
-                }
-            }
+                case STALE.CODES.PRAWO:
+                    if (_cbPRAWO.Checked == true)
+                    {
+                        Program.OSD_TXT = OSD_Right;
+                        R();
+                    }
+                    break;
 
-            if (line.Contains(STALE.ENTER))
-            {
-                if (_cbTRYB.Checked)
-                {
-                    R();
-                    Program.OSD_TXT = "Wstrzymaj / Wznów";
-                    //EN: Program.OSD_TXT = "Play / Pause";
-                }
-            }
+                case STALE.CODES.LEWO:
+                    if (_cbLEWO.Checked == true)
+                    {
+                        Program.OSD_TXT = OSD_Left;
+                        R();
+                    }
+                    break;
 
-            if (line.Contains(STALE.VOLUP))
-            {
-                if (_cbVOLUP.Checked)
-                {
+                case STALE.CODES.ENTER:
+                    Program.OSD_TXT = OSD_Enter;
                     R();
-                    Program.OSD_TXT = string.Format("Głośność {0}", PLUSY());
-                    //EN: Program.OSD_TXT = string.Format("Volume {0}", PLUSY());
-                }
-            }
+                    break;
 
-            if (line.Contains(STALE.VOLDW))
-            {
-                if (_cbVOLDW.Checked)
-                {
+                case STALE.CODES.VOLUP:
+                    if (_cbVOLUP.Checked == true)
+                    {
+                        Program.OSD_TXT = string.Format("{1} {0}", PLUSY(), OSD_VolUp);
+                        R();
+                    }
+                    break;
+
+                case STALE.CODES.VOLDW:
+                    if (_cbVOLDW.Checked == true)
+                    {
+                        Program.OSD_TXT = string.Format("{1} {0}", MINUSY(), OSD_VolDw);
+                        R();
+                    }
+                    break;
+
+                case STALE.CODES.CHUP:
+                    if (_cbCHUP.Checked == true)
+                    {
+                        Program.OSD_TXT = OSD_ChUp;
+                        R();
+                    }
+                    break;
+
+                case STALE.CODES.CHDW:
+                    if (_cbCHDW.Checked == true)
+                    {
+                        Program.OSD_TXT = OSD_ChDw;
+                        R();
+                    }
+                    break;
+
+                case STALE.CODES.EXIT:
+                    if (_cbEXIT.Checked == true)
+                    {
+                        Program.OSD_TXT = OSD_Exit;
+                        R();
+                    }
+                    break;
+
+                    #region 0-9
+                case STALE.CODES.B0:
+                    if (_cbNUMERY.Checked == true)
+                    {
+                        Program.OSD_TXT = OSD_0;
+                        //Program.OSD_TXT = "Przycisk 0";
+                        //EN: Program.OSD_TXT = "Button 0";
+                        R();
+                    }
+                    break;
+
+                case STALE.CODES.B1:
+                    if (_cbNUMERY.Checked == true)
+                    {
+                        Program.OSD_TXT = OSD_1;
+                        //Program.OSD_TXT = "Przycisk 1";
+                        //EN: Program.OSD_TXT = "Button 1";
+                        R();
+                    }
+                    break;
+
+                case STALE.CODES.B2:
+                    if (_cbNUMERY.Checked == true)
+                    {
+                        Program.OSD_TXT = OSD_2;
+                        //Program.OSD_TXT = "Przycisk 2";
+                        //EN: Program.OSD_TXT = "Button 2";
+                        R();
+                    }
+                    break;
+
+                case STALE.CODES.B3:
+                    if (_cbNUMERY.Checked == true)
+                    {
+                        Program.OSD_TXT = OSD_3;
+                        //Program.OSD_TXT = "Przycisk 3";
+                        //EN: Program.OSD_TXT = "Button 3";
+                        R();
+                    }
+                    break;
+
+                case STALE.CODES.B4:
+                    if (_cbNUMERY.Checked == true)
+                    {
+                        Program.OSD_TXT = OSD_4;
+                        //Program.OSD_TXT = "Przycisk 4";
+                        //EN: Program.OSD_TXT = "Button 4";
+                        R();
+                    }
+                    break;
+
+                case STALE.CODES.B5:
+                    if (_cbNUMERY.Checked == true)
+                    {
+                        Program.OSD_TXT = OSD_5;
+                        //Program.OSD_TXT = "Przycisk 5";
+                        //EN: Program.OSD_TXT = "Button 5";
+                        R();
+                    }
+                    break;
+
+                case STALE.CODES.B6:
+                    if (_cbNUMERY.Checked == true)
+                    {
+                        Program.OSD_TXT = OSD_6;
+                        //Program.OSD_TXT = "Przycisk 6";
+                        //EN: Program.OSD_TXT = "Button 6";
+                        R();
+                    }
+                    break;
+
+                case STALE.CODES.B7:
+                    if (_cbNUMERY.Checked == true)
+                    {
+                        Program.OSD_TXT = OSD_7;
+                        //Program.OSD_TXT = "Przycisk 7";
+                        //EN: Program.OSD_TXT = "Button 7";
+                        R();
+                    }
+                    break;
+
+                case STALE.CODES.B8:
+                    if (_cbNUMERY.Checked == true)
+                    {
+                        Program.OSD_TXT = OSD_8;
+                        //Program.OSD_TXT = "Przycisk 8";
+                        //EN: Program.OSD_TXT = "Button 8";
+                        R();
+                    }
+                    break;
+
+                case STALE.CODES.B9:
+                    if (_cbNUMERY.Checked == true)
+                    {
+                        Program.OSD_TXT = OSD_9;
+                        //Program.OSD_TXT = "Przycisk 9";
+                        //EN: Program.OSD_TXT = "Button 9";
+                        R();
+                    }
+                    break;
+                #endregion
+
+                case STALE.CODES.CZERWONY:
+                    if (_cbRED.Checked == true)
+                    {
+                        Program.OSD_TXT = OSD_Red;
+                        R();
+                    }
+                    break;
+
+                case STALE.CODES.ZIELONY:
+                    if (_cbGREEN.Checked == true)
+                    {
+                        Program.OSD_TXT = OSD_Green;
+                        R();
+                    }
+                    break;
+
+                case STALE.CODES.ZOLTY:
+                    if (_cbYELLOW.Checked == true)
+                    {
+                        Program.OSD_TXT = OSD_Yellow;
+                        R();
+                    }
+                    break;
+
+                case STALE.CODES.NIEBIESKI:
+                    if (_cbBLUE.Checked == true)
+                    {
+                        Program.OSD_TXT = OSD_Blue;
+                        R();
+                    }
+                    break;
+                #endregion
+
+                #region Other functions
+                case STALE.CODES.SHOWME:
+                    if (this.WindowState == FormWindowState.Minimized)
+                    {
+                        Program.OSD_TXT = OSD_911;
+                        R();
+                        SHOW();
+                    }
+                    break;
+
+                case STALE.CODES.MENU:
+                    GODZ = string.Format("{0}:{1}.{2}", DateTime.Now.Hour.ToString("00"),
+                                                    DateTime.Now.Minute.ToString("00"),
+                                                    DateTime.Now.Second.ToString("00"));
+
+                    Program.OSD_TXT = string.Format("{1} {0}", GODZ, OSD_Time);
                     R();
-                    Program.OSD_TXT = string.Format("Głośność {0}", MINUSY());
-                    //EN: Program.OSD_TXT = string.Format("Volume {0}", MINUSY());
-                }
+                    break;
+                #endregion
+
+                default:
+                    break;
             }
 
             if (line.Contains("M+") || line.Contains("M-"))
             {
                 if (_cbSPEED.Checked)
                 {
+                    Program.OSD_TXT = string.Format("{1} {0}px ]", line, OSD_MSpeed);
                     R();
-                    Program.OSD_TXT = string.Format("Prędkość myszki\npx + {0}", line.Replace("\n", "" ));
-                    //EN: Program.OSD_TXT = string.Format("Mouse Speed\npx + {0}", line.Replace("\n", "" ));
                 }
             }
-
-            if (line.Contains(STALE.CHUP))
-            {
-                if (_cbCHUP.Checked)
-                {
-                    R();
-                    Program.OSD_TXT = "Następny odcinek";
-                    //EN: Program.OSD_TXT = "Next episode";
-                }
-            }
-
-            if (line.Contains(STALE.CHDW))
-            {
-                if (_cbCHDW.Checked)
-                {
-                    R();
-                    Program.OSD_TXT = "Poprzedni odcinek";
-                    //EN: Program.OSD_TXT = "Previous episode";
-                }
-            }
-
-            if (line.Contains(STALE.EXIT))
-            {
-                if (_cbEXIT.Checked)
-                {
-                    R();
-                    Program.OSD_TXT = "Pełny ekran WŁ/WYŁ";
-                    //EN: Program.OSD_TXT = "Toggle\nFull Screepn";
-                }
-            }
-
-            if (_cbNUMERY.Checked)
-            {
-                if (line.Contains(STALE.B0))
-                {
-                    Program.OSD_TXT = "Przycisk 0";
-                    //EN: Program.OSD_TXT = "Button 0";
-                }
-                if (line.Contains(STALE.B1))
-                {
-                    Program.OSD_TXT = "Przycisk 1";
-                    //EN: Program.OSD_TXT = "Button 1";
-                }
-                if (line.Contains(STALE.B2))
-                {
-                    Program.OSD_TXT = "Przycisk 2";
-                    //EN: Program.OSD_TXT = "Button 2";
-                }
-                if (line.Contains(STALE.B3))
-                {
-                    Program.OSD_TXT = "Przycisk 3";
-                    //EN: Program.OSD_TXT = "Button 3";
-                }
-                if (line.Contains(STALE.B4))
-                {
-                    Program.OSD_TXT = "Przycisk 4";
-                    //EN: Program.OSD_TXT = "Button 4";
-                }
-                if (line.Contains(STALE.B5))
-                {
-                    Program.OSD_TXT = "Przycisk 5";
-                    //EN: Program.OSD_TXT = "Button 5";
-                }
-                if (line.Contains(STALE.B6))
-                {
-                    Program.OSD_TXT = "Przycisk 6";
-                    //EN: Program.OSD_TXT = "Button 6";
-                }
-                if (line.Contains(STALE.B7))
-                {
-                    Program.OSD_TXT = "Przycisk 7";
-                    //EN: Program.OSD_TXT = "Button 7";
-                }
-                if (line.Contains(STALE.B8))
-                {
-                    Program.OSD_TXT = "Przycisk 8";
-                    //EN: Program.OSD_TXT = "Button 8";
-                }
-                if (line.Contains(STALE.B9))
-                {
-                    Program.OSD_TXT = "Przycisk 9";
-                    //EN: Program.OSD_TXT = "Button 9";
-                }
-                R();
-            }
-
-            if (line.Contains(STALE.CZERWONY))
-            {
-                if (_cbRED.Checked)
-                {
-                    R();
-                    Program.OSD_TXT = "Wyzwolenie akcji przycisku\nC Z E R W O N Y";
-                    //EN: Program.OSD_TXT = "Action under\nR E D";
-                }
-            }
-
-            if (line.Contains(STALE.ZIELONY))
-            {
-                if (_cbGREEN.Checked)
-                {
-                    R();
-                    Program.OSD_TXT = "Wyzwolenie akcji przycisku\nZ I E L O N Y";
-                    //EN: Program.OSD_TXT = "Action under\nG R E E N";
-                }
-            }
-
-            if (line.Contains(STALE.ZOLTY))
-            {
-                if (_cbYELLOW.Checked)
-                {
-                    R();
-                    Program.OSD_TXT = "Wyzwolenie akcji przycisku\nŻ Ó Ł T Y";
-                    //EN: Program.OSD_TXT = "Action under\nY E L L O W";
-                }
-            }
-
-            if (line.Contains(STALE.NIEBIESKI))
-            {
-                if (_cbBLUE.Checked)
-                {
-                    R();
-                    Program.OSD_TXT = "Wyzwolenie akcji przycisku\nN I E B I E S K I";
-                    //EN: Program.OSD_TXT = "Action under\nB L U E";
-                }
-            }
-            #endregion
-
-            #region Other functions
-            if (line.Contains(STALE.SHOWME))
-            {
-                if (this.WindowState == FormWindowState.Minimized)
-                {
-                    R();
-                    Program.OSD_TXT = "Pokazuję program...";
-                    //EN: Program.OSD_TXT = "Showing program...";
-                    SHOW();
-                }
-            }
-            #endregion
         }
+        #endregion
 
-
-        private void FIXIKONA(object sender, EventArgs e)
-        {
-            IKONA.Icon = null;
-            Application.DoEvents();
-        }
-
-        private void ICON_KLIK(object sender, EventArgs e)
-        {
-            SHOW();
-        }
-
-        private void ZAMYKANIE(object sender, FormClosingEventArgs e)
-        {
-            /* Problem w tym, że ikona się zawiesza przy wyjściu. Czyścimy ręcznie */
-            /* Bugfix for notyfiicon */
-            IKONA.Icon = null;
-            IKONA.Dispose();
-            Application.DoEvents();
-        }
 
         private void TIKTAK(object sender, EventArgs e)
         {
             #region DO STUFF
+
+            _cMnuSerialSTART.Enabled = !sPORT.IsOpen;
+            _cMnuSerialSTOP.Enabled = sPORT.IsOpen;
+
             try
             {
                 if (Program.MYSZ)
@@ -455,8 +510,7 @@ namespace irRemote
                 }
                 else
                 {
-                    _cSerialPort.Text = "Odłączony";
-                    //EN: _cSerialPort.Text = "Disconnected";
+                    _cSerialPort.Text = LABEL_Disconnected;
                 }
                 if (this.WindowState == FormWindowState.Minimized)
                 {
@@ -466,49 +520,252 @@ namespace irRemote
             }
             catch (Exception)
             {
+                
             }
-            #endregion
 
+        #endregion
         }
+
+        #region LOCALIZATION
+        /// <summary>
+        /// Change UI language
+        /// </summary>
+        /// <param name="lang">Language</param>
+        /// <returns>true if success</returns>
+        internal bool ChangeLanguage(LANG.Language lang)
+        {
+            bool ret = false;
+            
+            try
+            {
+                // one by one... fix this after VS update...
+                if(lang == LANG.Language.Polish)
+                {
+                    this.Text = LANG.POLISH.str_cTitle;
+                    _cbAUTO.Text = LANG.POLISH.str_cAuto;
+                    _cGRUPA.Text = LANG.POLISH.str_cEvents;
+                    _cbTRYB.Text = LANG.POLISH.str_cMode;
+                    _cbMYSZ.Text = LANG.POLISH.str_cMouse;
+                    _cbSPEED.Text = LANG.POLISH.str_cMSpeed;
+                    _cbPOWER.Text = LANG.POLISH.str_cPower;
+                    _cbSPEED.Text = LANG.POLISH.str_cMute;
+                    _cbAUTO.Text = LANG.POLISH.str_cAuto;
+                    _cbINPUT.Text = LANG.POLISH.str_cInput;
+                    _cbPRAWO.Text = LANG.POLISH.str_cRight;
+                    _cbLEWO.Text = LANG.POLISH.str_cLeft;
+                    _cbGORA.Text = LANG.POLISH.str_cUp;
+                    _cbDOL.Text = LANG.POLISH.str_cDown;
+                    _cbVOLUP.Text = LANG.POLISH.str_cVolUP;
+                    _cbVOLDW.Text = LANG.POLISH.str_cVolDW;
+                    _cbCHUP.Text = LANG.POLISH.str_cCHUP;
+                    _cbCHDW.Text = LANG.POLISH.str_cCHDW;
+                    _cbEXIT.Text = LANG.POLISH.str_cExit;
+                    _cbNUMERY.Text = LANG.POLISH.str_c09;
+                    _cbRED.Text = LANG.POLISH.str_cRed;
+                    _cbGREEN.Text = LANG.POLISH.str_cGreen;
+                    _cbYELLOW.Text = LANG.POLISH.str_cYellow;
+                    _cbBLUE.Text = LANG.POLISH.str_cBlue;
+                    _cLABELLang.Text = LANG.POLISH.str_cLang;
+                    _cbMINIMAL.Text = LANG.POLISH.str_cStartW;
+                    _cLabelKOL.Text = LANG.POLISH.str_cOsdColor;
+                    _cPORTLABEL.Text = LANG.POLISH.str_cDevLabel;
+                    _cMnuSerialSTART.Text = LANG.POLISH.str_cmnuSerialStart;
+                    _cMnuSerialSTOP.Text = LANG.POLISH.str_cmnuSerialStop;
+                    _cmnushow.Text = LANG.POLISH.str_cmnuShow;
+                    _cmnuzamknij.Text = LANG.POLISH.str_cmnuClose;
+
+                    _cOSDCOLOR.Items.Clear();
+                    _cOSDCOLOR.Items.Add(LANG.POLISH.str_sWhite);
+                    _cOSDCOLOR.Items.Add(LANG.POLISH.str_sBlack);
+                    _cOSDCOLOR.Items.Add(LANG.POLISH.str_sGrey);
+                    _cOSDCOLOR.Items.Add(LANG.POLISH.str_sBlue);
+                    _cOSDCOLOR.Items.Add(LANG.POLISH.str_sYellow);
+                    _cOSDCOLOR.Items.Add(LANG.POLISH.str_sRed);
+                    _cOSDCOLOR.Items.Add(LANG.POLISH.str_sGreen);
+                    _cOSDCOLOR.Items.Add(LANG.POLISH.str_sPurple);
+                    _cOSDCOLOR.Items.Add(LANG.POLISH.str_sAzure);
+
+                    LABEL_Disconnected = LANG.POLISH.str_sDisconnected;
+
+                    OSD_Loading = LANG.POLISH.str_oLoading;
+                    OSD_ModeOn = LANG.POLISH.str_oModeOn;
+                    OSD_ModeOff = LANG.POLISH.str_oModeOFF;
+                    OSD_MouseOn = LANG.POLISH.str_oMouseON;
+                    OSD_MouseOff = LANG.POLISH.str_oMouseOFF;
+                    OSD_Power = LANG.POLISH.str_oPower;
+                    OSD_Auto = LANG.POLISH.str_oAuto;
+                    OSD_Input = LANG.POLISH.str_oInput;
+                    OSD_Mute = LANG.POLISH.str_oMute;
+                    OSD_Right = LANG.POLISH.str_oRight;
+                    OSD_Left = LANG.POLISH.str_oLeft;
+                    OSD_Enter = LANG.POLISH.str_oEnter;
+                    OSD_VolUp = LANG.POLISH.str_oVolUP;
+                    OSD_VolDw = LANG.POLISH.str_oVolDW;
+                    OSD_ChUp = LANG.POLISH.str_oCHUP;
+                    OSD_ChDw = LANG.POLISH.str_oCHDW;
+                    OSD_Exit = LANG.POLISH.str_oExit;
+                    OSD_Red = LANG.POLISH.str_oRed;
+                    OSD_Green = LANG.POLISH.str_oGreen;
+                    OSD_Yellow = LANG.POLISH.str_oYellow;
+                    OSD_Blue = LANG.POLISH.str_oBlue;
+                    OSD_0 = LANG.POLISH.str_o0;
+                    OSD_1 = LANG.POLISH.str_o1;
+                    OSD_2 = LANG.POLISH.str_o2;
+                    OSD_3 = LANG.POLISH.str_o3;
+                    OSD_4 = LANG.POLISH.str_o4;
+                    OSD_5 = LANG.POLISH.str_o5;
+                    OSD_6 = LANG.POLISH.str_o6;
+                    OSD_7 = LANG.POLISH.str_o7;
+                    OSD_8 = LANG.POLISH.str_o8;
+                    OSD_9 = LANG.POLISH.str_o9;
+                    OSD_Time = LANG.POLISH.str_oTime;
+                    OSD_MSpeed = LANG.POLISH.str_oMouseSpeed;
+                    OSD_911 = LANG.POLISH.str_o911;
+                }
+
+                if (lang == LANG.Language.English)
+                {
+                    this.Text = LANG.ENGLISH.str_cTitle;
+                    _cbAUTO.Text = LANG.ENGLISH.str_cAuto;
+                    _cGRUPA.Text = LANG.ENGLISH.str_cEvents;
+                    _cbTRYB.Text = LANG.ENGLISH.str_cMode;
+                    _cbMYSZ.Text = LANG.ENGLISH.str_cMouse;
+                    _cbSPEED.Text = LANG.ENGLISH.str_cMSpeed;
+                    _cbPOWER.Text = LANG.ENGLISH.str_cPower;
+                    _cbSPEED.Text = LANG.ENGLISH.str_cMute;
+                    _cbAUTO.Text = LANG.ENGLISH.str_cAuto;
+                    _cbINPUT.Text = LANG.ENGLISH.str_cInput;
+                    _cbPRAWO.Text = LANG.ENGLISH.str_cRight;
+                    _cbLEWO.Text = LANG.ENGLISH.str_cLeft;
+                    _cbGORA.Text = LANG.ENGLISH.str_cUp;
+                    _cbDOL.Text = LANG.ENGLISH.str_cDown;
+                    _cbVOLUP.Text = LANG.ENGLISH.str_cVolUP;
+                    _cbVOLDW.Text = LANG.ENGLISH.str_cVolDW;
+                    _cbCHUP.Text = LANG.ENGLISH.str_cCHUP;
+                    _cbCHDW.Text = LANG.ENGLISH.str_cCHDW;
+                    _cbEXIT.Text = LANG.ENGLISH.str_cExit;
+                    _cbNUMERY.Text = LANG.ENGLISH.str_c09;
+                    _cbRED.Text = LANG.ENGLISH.str_cRed;
+                    _cbGREEN.Text = LANG.ENGLISH.str_cGreen;
+                    _cbYELLOW.Text = LANG.ENGLISH.str_cYellow;
+                    _cbBLUE.Text = LANG.ENGLISH.str_cBlue;
+                    _cLABELLang.Text = LANG.ENGLISH.str_cLang;
+                    _cbMINIMAL.Text = LANG.ENGLISH.str_cStartW;
+                    _cLabelKOL.Text = LANG.ENGLISH.str_cOsdColor;
+                    _cPORTLABEL.Text = LANG.ENGLISH.str_cDevLabel;
+                    _cMnuSerialSTART.Text = LANG.ENGLISH.str_cmnuSerialStart;
+                    _cMnuSerialSTOP.Text = LANG.ENGLISH.str_cmnuSerialStop;
+                    _cmnushow.Text = LANG.ENGLISH.str_cmnuShow;
+                    _cmnuzamknij.Text = LANG.ENGLISH.str_cmnuClose;
+
+                    _cOSDCOLOR.Items.Clear();
+                    _cOSDCOLOR.Items.Add(LANG.ENGLISH.str_sWhite);
+                    _cOSDCOLOR.Items.Add(LANG.ENGLISH.str_sBlack);
+                    _cOSDCOLOR.Items.Add(LANG.ENGLISH.str_sGrey);
+                    _cOSDCOLOR.Items.Add(LANG.ENGLISH.str_sBlue);
+                    _cOSDCOLOR.Items.Add(LANG.ENGLISH.str_sYellow);
+                    _cOSDCOLOR.Items.Add(LANG.ENGLISH.str_sRed);
+                    _cOSDCOLOR.Items.Add(LANG.ENGLISH.str_sGreen);
+                    _cOSDCOLOR.Items.Add(LANG.ENGLISH.str_sPurple);
+                    _cOSDCOLOR.Items.Add(LANG.ENGLISH.str_sAzure);
+
+                    LABEL_Disconnected = LANG.ENGLISH.str_sDisconnected;
+
+                    OSD_Loading = LANG.ENGLISH.str_oLoading;
+                    OSD_ModeOn = LANG.ENGLISH.str_oModeOn;
+                    OSD_ModeOff = LANG.ENGLISH.str_oModeOFF;
+                    OSD_MouseOn = LANG.ENGLISH.str_oMouseON;
+                    OSD_MouseOff = LANG.ENGLISH.str_oMouseOFF;
+                    OSD_Power = LANG.ENGLISH.str_oPower;
+                    OSD_Auto = LANG.ENGLISH.str_oAuto;
+                    OSD_Input = LANG.ENGLISH.str_oInput;
+                    OSD_Mute = LANG.ENGLISH.str_oMute;
+                    OSD_Right = LANG.ENGLISH.str_oRight;
+                    OSD_Left = LANG.ENGLISH.str_oLeft;
+                    OSD_Enter = LANG.ENGLISH.str_oEnter;
+                    OSD_VolUp = LANG.ENGLISH.str_oVolUP;
+                    OSD_VolDw = LANG.ENGLISH.str_oVolDW;
+                    OSD_ChUp = LANG.ENGLISH.str_oCHUP;
+                    OSD_ChDw = LANG.ENGLISH.str_oCHDW;
+                    OSD_Exit = LANG.ENGLISH.str_oExit;
+                    OSD_Red = LANG.ENGLISH.str_oRed;
+                    OSD_Green = LANG.ENGLISH.str_oGreen;
+                    OSD_Yellow = LANG.ENGLISH.str_oYellow;
+                    OSD_Blue = LANG.ENGLISH.str_oBlue;
+                    OSD_0 = LANG.ENGLISH.str_o0;
+                    OSD_1 = LANG.ENGLISH.str_o1;
+                    OSD_2 = LANG.ENGLISH.str_o2;
+                    OSD_3 = LANG.ENGLISH.str_o3;
+                    OSD_4 = LANG.ENGLISH.str_o4;
+                    OSD_5 = LANG.ENGLISH.str_o5;
+                    OSD_6 = LANG.ENGLISH.str_o6;
+                    OSD_7 = LANG.ENGLISH.str_o7;
+                    OSD_8 = LANG.ENGLISH.str_o8;
+                    OSD_9 = LANG.ENGLISH.str_o9;
+                    OSD_Time = LANG.ENGLISH.str_oTime;
+                    OSD_MSpeed = LANG.ENGLISH.str_oMouseSpeed;
+                    OSD_911 = LANG.ENGLISH.str_o911;
+                }
+
+                ret = true;
+            }
+            catch (Exception ex)
+            {
+                ret = false;
+                MessageBox.Show(ex.Message, STALE.TRAY_NAME, MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+
+            return ret;
+        }
+        #endregion
 
         #region KOLORKI
         private void _cOSDCOLOR_SelectedValueChanged(object sender, EventArgs e)
         {
             switch (_cOSDCOLOR.Text)
             {
-                case "White":
+                case LANG.ENGLISH.str_sWhite:
+                case LANG.POLISH.str_sWhite:
                     Program.OSD_COLOR = STALE.KOLOR.BIALY;
                     break;
 
-                case "Black":
+                case LANG.ENGLISH.str_sBlack:
+                case LANG.POLISH.str_sBlack:
                     Program.OSD_COLOR = STALE.KOLOR.CZARNY;
                     break;
 
-                case "Grey":
+                case LANG.ENGLISH.str_sGrey:
+                case LANG.POLISH.str_sGrey:
                     Program.OSD_COLOR = STALE.KOLOR.SZARY;
                     break;
 
-                case "Blue":
+                case LANG.ENGLISH.str_sBlue:
+                case LANG.POLISH.str_sBlue:
                     Program.OSD_COLOR = STALE.KOLOR.NIEBESKI;
                     break;
 
-                case "Yellow":
+                case LANG.ENGLISH.str_sYellow:
+                case LANG.POLISH.str_sYellow:
                     Program.OSD_COLOR = STALE.KOLOR.ZOLTY;
                     break;
 
-                case "Red":
+                case LANG.ENGLISH.str_sRed:
+                case LANG.POLISH.str_sRed:
                     Program.OSD_COLOR = STALE.KOLOR.CZERWONY;
                     break;
 
-                case "Green":
+                case LANG.ENGLISH.str_sGreen:
+                case LANG.POLISH.str_sGreen:
                     Program.OSD_COLOR = STALE.KOLOR.ZIELONY;
                     break;
 
-                case "Purple":
+                case LANG.ENGLISH.str_sPurple:
+                case LANG.POLISH.str_sPurple:
                     Program.OSD_COLOR = STALE.KOLOR.FIOLETOWY;
                     break;
 
-                case "Azure":
+                case LANG.ENGLISH.str_sAzure:
+                case LANG.POLISH.str_sAzure:
                     Program.OSD_COLOR = STALE.KOLOR.BLEKITNY;
                     break;
 
@@ -520,20 +777,39 @@ namespace irRemote
         }
         #endregion
 
+        #region Clicks and stuff
+
         private void SHOW()
         {
             this.Show();
             this.WindowState = FormWindowState.Normal;
+            this.BringToFront();
+            this.TopMost = true;
+            this.TopMost = false;
         }
 
         private void frmMain_Shown(object sender, EventArgs e)
         {
-            new frmOSD().Show();
+            fOSD.Show();
         }
 
         private void _cmnuzamknij_Click(object sender, EventArgs e)
         {
             Application.Exit();
+        }
+
+        private void _cLanguage_SelectedValueChanged(object sender, EventArgs e)
+        {
+            if (_cLanguage.Text == "Polish")
+            {
+                Registry.SetValue(@"HKEY_CURRENT_USER\SOFTWARE\AKIL_IR_REMOTE", "jezyk", LANG.Language.Polish);
+                ChangeLanguage(LANG.Language.Polish);
+            }
+            else
+            {
+                Registry.SetValue(@"HKEY_CURRENT_USER\SOFTWARE\AKIL_IR_REMOTE", "jezyk", LANG.Language.English);
+                ChangeLanguage(LANG.Language.English);
+            }
         }
 
         private void _cbMINIMAL_CheckedChanged(object sender, EventArgs e)
@@ -551,6 +827,58 @@ namespace irRemote
             SHOW();
         }
 
+        private void FIXIKONA(object sender, EventArgs e)
+        {
+            IKONA.Icon = null;
+            Application.DoEvents();
+        }
+
+        private void _cPortSPEED_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            Registry.SetValue(@"HKEY_CURRENT_USER\SOFTWARE\AKIL_IR_REMOTE", "speed", _cPortSPEED.Text);
+            sPORT.BaudRate = int.Parse(_cPortSPEED.Text);
+        }
+
+        private void _cMnuSerialSTOP_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                sPORT.Close();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(string.Format("Error while stopping connection:\n{0}", ex.Message), "Serial Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        private void _cMnuSerialSTART_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                sPORT.Open();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(string.Format("Error while starting connection:\n{0}", ex.Message), "Serial Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        private void ICON_KLIK(object sender, EventArgs e)
+        {
+            SHOW();
+        }
+
+        private void ZAMYKANIE(object sender, FormClosingEventArgs e)
+        {
+            /* Problem w tym, że ikona się zawiesza przy wyjściu. Czyścimy ręcznie */
+            /* Bugfix for notyfiicon */
+            IKONA.Icon = null;
+            IKONA.Dispose();
+            Application.DoEvents();
+        }
+
+        #endregion
+
         #region fancy shit
         string PLUSY()
         {
@@ -558,15 +886,15 @@ namespace irRemote
             PL++;
             if (PL == 1)
             {
-                ret = "+";
+                ret = "🔈+";
             }
             if (PL == 2)
             {
-                ret = "++";
+                ret = "🔈++";
             }
             if (PL == 3)
             {
-                ret = "+++";
+                ret = "🔈+++";
                 PL = 0;
             }
 
@@ -579,15 +907,15 @@ namespace irRemote
             MI++;
             if (MI == 1)
             {
-                ret = "-";
+                ret = "🔊-";
             }
             if (MI == 2)
             {
-                ret = "--";
+                ret = "🔊--";
             }
             if (MI == 3)
             {
-                ret = "---";
+                ret = "🔊---";
                 MI = 0;
             }
 

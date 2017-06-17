@@ -11,13 +11,6 @@
  *                                 
  */
 using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace irRemote
@@ -35,30 +28,31 @@ namespace irRemote
             TIK.Tick += TIKrobiTAK;
             TIK.Start();
 
-            ANIMATE.Interval = 50;
+            ANIMATE.Interval = 30;
             ANIMATE.Tick += Animacja;
             ANIMATE.Start();
         }
 
+        #region animate...
         private void Animacja(object sender, EventArgs e)
         {
-            if (Program.TimeOut >= 4) // 5 sek.
-            {
-                Program.Animating = true;
-            }
+                if (Program.TimeOut >= (STALE.OSD_TIMEOUT - 1))
+                {
+                    Program.Animating = true;
+                }
 
             if (Program.Animating)
             {
                 if (Program.TimeOut < 1)
                 {
                     // chyba najlepsza animacja to po prostu fadein
-                    if (this.Opacity < .75)
+                    if (this.Opacity < STALE.OSD_ALPHA)
                     {
-                        this.Opacity += .03;
+                        this.Opacity += STALE.OSD_ANIM_MODIFICATOR;
                     }
                     else
                     {
-                        this.Opacity = .75;
+                        this.Opacity = STALE.OSD_ALPHA;
                         Program.Animating = false;
                     }
                 }
@@ -66,7 +60,7 @@ namespace irRemote
                 {
                     if (this.Opacity > 0)
                     {
-                        this.Opacity -= .03;
+                        this.Opacity -= STALE.OSD_ANIM_MODIFICATOR;
                     }
                     else
                     {
@@ -75,16 +69,20 @@ namespace irRemote
                         Program.TimeOut = 0;
                     }
                 }
+
             }
+
         }
+        #endregion
 
         private void TIKrobiTAK(object sender, EventArgs e)
         {
+
             _cTXT.ForeColor = Program.OSD_COLOR;
             _cLOGO.Image = Program.OSD_ICO;
             _cTXT.Text = Program.OSD_TXT;
 
-            if (this.Opacity == .75)
+            if (this.Opacity == STALE.OSD_ALPHA)
             {
                 Program.TimeOut++;
             }

@@ -48,7 +48,7 @@ namespace irRemote
 #if !DEBUG
             if (processes.Length > 1)
             {
-                MessageBox.Show(string.Format("{0} is already running.", appNAME));
+                MessageBox.Show(string.Format("{0} {1}", appNAME, LANG.ENGLISH.str_sInstanceError));
                 return;
             }
             else

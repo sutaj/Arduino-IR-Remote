@@ -17,48 +17,62 @@ namespace irRemote
 {
     static internal class STALE
     {
+        #region locals...
+        private static string tray_name = "USB REMOTE";
+        private static double osd_anim_modificator = .038;
+        private static double osd_alpha = .78;
+        private static int osd_timeout = 5;
+        #endregion
+
         // zmień na nazwę swojej płytki ARDUINO IDE -> NARZĘDZIA -> POBIERZ INFORMACJE O PŁYTCE -> pole BN
         // change name for your arduino board, or atmega chipset
         internal static string DEVICE { get => "Arduino Leonardo"; }
 
-        internal static string TRAY_NAME { get => "USB REMOTE"; }
+        internal static string TRAY_NAME { get => tray_name; set => tray_name = value; }
+        internal static double OSD_ALPHA { get => osd_alpha; set => osd_alpha = value; }
+        internal static double OSD_ANIM_MODIFICATOR { get => osd_anim_modificator; set => osd_anim_modificator = value; }
+        internal static int OSD_TIMEOUT { get => osd_timeout; set => osd_timeout = value; } // OSD show time in seconds...
 
-        internal static string POWER { get => "x100"; }
-        internal static string TRYB_ON { get => "x101.1"; }
-        internal static string TRYB_OFF { get => "x101.0"; }
-        internal static string MYSZ_ON { get => "x102.1"; }
-        internal static string MYSZ_OFF { get => "x102.0"; }
-        internal static string AUTO { get => "x103"; }
-        internal static string INPUT { get => "x104"; }
-        internal static string MUTE { get => "x105"; }
-        internal static string PRAWO { get => "x106"; }
-        internal static string LEWO { get => "x108"; }
-        internal static string GORA { get => "x109"; }
-        internal static string DOL { get => "x107"; }
-        internal static string ENTER { get => "x110"; }
-        internal static string VOLUP { get => "x111"; }
-        internal static string VOLDW { get => "x112"; }
-        internal static string CHUP { get => "x113"; }
-        internal static string CHDW { get => "x114"; }
-        internal static string EXIT { get => "x115"; }
+        static internal class CODES
+        {
+            internal const string POWER     = "x100";
+            internal const string TRYB_ON   = "x101.1";
+            internal const string TRYB_OFF  = "x101.0";
+            internal const string MYSZ_ON   = "x102.1";
+            internal const string MYSZ_OFF  = "x102.0";
+            internal const string AUTO      = "x103";
+            internal const string INPUT     = "x104";
+            internal const string MUTE      = "x105";
+            internal const string PRAWO     = "x106";
+            internal const string LEWO      = "x108";
+            internal const string GORA      = "x109";
+            internal const string DOL       = "x107";
+            internal const string ENTER     = "x110";
+            internal const string VOLUP     = "x111";
+            internal const string VOLDW     = "x112";
+            internal const string CHUP      = "x113";
+            internal const string CHDW      = "x114";
+            internal const string EXIT      = "x115";
+            internal const string MENU      = "x130";
 
-        internal static string B1 { get => "x116"; }
-        internal static string B2 { get => "x117"; }
-        internal static string B3 { get => "x118"; }
-        internal static string B4 { get => "x119"; }
-        internal static string B5 { get => "x120"; }
-        internal static string B6 { get => "x121"; }
-        internal static string B7 { get => "x122"; }
-        internal static string B8 { get => "x123"; }
-        internal static string B9 { get => "x124"; }
-        internal static string B0 { get => "x125"; }
+            internal const string B1 = "x116";
+            internal const string B2 = "x117";
+            internal const string B3 = "x118";
+            internal const string B4 = "x119";
+            internal const string B5 = "x120";
+            internal const string B6 = "x121";
+            internal const string B7 = "x122";
+            internal const string B8 = "x123";
+            internal const string B9 = "x124";
+            internal const string B0 = "x125";
 
-        internal static string CZERWONY { get => "x126"; }
-        internal static string ZIELONY { get => "x127"; }
-        internal static string ZOLTY { get => "x128"; }
-        internal static string NIEBIESKI { get => "x129"; }
+            internal const string CZERWONY  = "x126";
+            internal const string ZIELONY   = "x127";
+            internal const string ZOLTY     = "x128";
+            internal const string NIEBIESKI = "x129";
 
-        internal static string SHOWME { get => "x911"; }
+            internal const string SHOWME    = "x911";
+        }
 
         internal enum Tryb
         {
@@ -68,11 +82,10 @@ namespace irRemote
         }
 
         /// <summary>
-        /// collors
+        /// kolorki
         /// </summary>
         static internal class KOLOR
         {
-
             internal static Color BIALY { get => Color.FromArgb(255, 255, 255); }
             internal static Color CZARNY { get => Color.FromArgb(0, 0, 0); }
             internal static Color SZARY { get => Color.FromArgb(148, 148, 148); }
@@ -82,7 +95,6 @@ namespace irRemote
             internal static Color ZIELONY { get => Color.FromArgb(44, 226, 121); }
             internal static Color FIOLETOWY { get => Color.FromArgb(226, 44, 215); }
             internal static Color BLEKITNY { get => Color.FromArgb(103, 222, 244); }
-
         }
 
     }
