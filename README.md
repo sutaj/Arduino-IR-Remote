@@ -67,7 +67,6 @@ I will make english version later.
       
       * othe minor bugfixes...
       
- ## Changelog
 **21-08-2017**:
       
       * Communication indicator
