@@ -67,6 +67,12 @@ I will make english version later.
       
       * othe minor bugfixes...
       
+ ## Changelog
+**21-08-2017**:
+      
+      * Communication indicator
+      
+      * Moved OSD to new thread, so it will be smoother now
       
 
 For compiling arduino sketch, you need IR library from: https://github.com/z3t0/Arduino-IRremote (thx to z3t0 btw!)
