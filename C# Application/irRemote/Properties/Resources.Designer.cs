@@ -81,6 +81,16 @@ namespace irRemote.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap green_circle_th {
+            get {
+                object obj = ResourceManager.GetObject("green_circle_th", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
         /// </summary>
         internal static System.Drawing.Icon irremote {
@@ -116,6 +126,16 @@ namespace irRemote.Properties {
         internal static System.Drawing.Bitmap Plex_Logo {
             get {
                 object obj = ResourceManager.GetObject("Plex_Logo", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap red_circle_th {
+            get {
+                object obj = ResourceManager.GetObject("red_circle_th", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }

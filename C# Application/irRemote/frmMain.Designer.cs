@@ -50,6 +50,7 @@ namespace irRemote
             this._cMnuSerialSTOP = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
             this._cMnuSerialSTART = new System.Windows.Forms.ToolStripMenuItem();
+            this._cGITLink = new System.Windows.Forms.ToolStripStatusLabel();
             this._cGRUPA = new System.Windows.Forms.GroupBox();
             this._cpicTRYB = new System.Windows.Forms.PictureBox();
             this._cbBLUE = new System.Windows.Forms.CheckBox();
@@ -86,12 +87,14 @@ namespace irRemote
             this._cPortSPEED = new System.Windows.Forms.ComboBox();
             this._cLanguage = new System.Windows.Forms.ComboBox();
             this._cLABELLang = new System.Windows.Forms.Label();
+            this._cRECIVE = new System.Windows.Forms.PictureBox();
             this._cSTRIP.SuspendLayout();
             this._cGRUPA.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this._cpicTRYB)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this._cSEPA)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this._cSEP)).BeginInit();
             this._cmnuIKONKA.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this._cRECIVE)).BeginInit();
             this.SuspendLayout();
             // 
             // _cSTRIP
@@ -100,7 +103,8 @@ namespace irRemote
             this._cPORTLABEL,
             this._cSerialPort,
             this._ctSEP,
-            this._cPortSettMnu});
+            this._cPortSettMnu,
+            this._cGITLink});
             this._cSTRIP.LayoutStyle = System.Windows.Forms.ToolStripLayoutStyle.HorizontalStackWithOverflow;
             this._cSTRIP.Location = new System.Drawing.Point(0, 426);
             this._cSTRIP.Name = "_cSTRIP";
@@ -110,6 +114,7 @@ namespace irRemote
             // 
             // _cPORTLABEL
             // 
+            this._cPORTLABEL.Margin = new System.Windows.Forms.Padding(30, 3, 0, 2);
             this._cPORTLABEL.Name = "_cPORTLABEL";
             this._cPORTLABEL.Size = new System.Drawing.Size(70, 17);
             this._cPORTLABEL.Text = "Device port:";
@@ -159,6 +164,16 @@ namespace irRemote
             this._cMnuSerialSTART.Size = new System.Drawing.Size(194, 22);
             this._cMnuSerialSTART.Text = "Start Serial Connection";
             this._cMnuSerialSTART.Click += new System.EventHandler(this._cMnuSerialSTART_Click);
+            // 
+            // _cGITLink
+            // 
+            this._cGITLink.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
+            this._cGITLink.IsLink = true;
+            this._cGITLink.Margin = new System.Windows.Forms.Padding(50, 3, 0, 2);
+            this._cGITLink.Name = "_cGITLink";
+            this._cGITLink.Size = new System.Drawing.Size(27, 17);
+            this._cGITLink.Text = "Akil";
+            this._cGITLink.Click += new System.EventHandler(this._cGITLink_Click);
             // 
             // _cGRUPA
             // 
@@ -555,9 +570,9 @@ namespace irRemote
             // _cbMINIMAL
             // 
             this._cbMINIMAL.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this._cbMINIMAL.Location = new System.Drawing.Point(316, 351);
+            this._cbMINIMAL.Location = new System.Drawing.Point(301, 351);
             this._cbMINIMAL.Name = "_cbMINIMAL";
-            this._cbMINIMAL.Size = new System.Drawing.Size(134, 24);
+            this._cbMINIMAL.Size = new System.Drawing.Size(149, 24);
             this._cbMINIMAL.TabIndex = 5;
             this._cbMINIMAL.Text = "Start minimalized";
             this._cbMINIMAL.UseVisualStyleBackColor = true;
@@ -565,7 +580,7 @@ namespace irRemote
             // 
             // _cPortSPEED
             // 
-            this._cPortSPEED.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this._cPortSPEED.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this._cPortSPEED.FormattingEnabled = true;
             this._cPortSPEED.Items.AddRange(new object[] {
             "300",
@@ -580,7 +595,7 @@ namespace irRemote
             "38400",
             "57600",
             "115200"});
-            this._cPortSPEED.Location = new System.Drawing.Point(337, 427);
+            this._cPortSPEED.Location = new System.Drawing.Point(338, 427);
             this._cPortSPEED.Name = "_cPortSPEED";
             this._cPortSPEED.Size = new System.Drawing.Size(98, 21);
             this._cPortSPEED.TabIndex = 6;
@@ -610,11 +625,22 @@ namespace irRemote
             this._cLABELLang.TabIndex = 8;
             this._cLABELLang.Text = "Language";
             // 
+            // _cRECIVE
+            // 
+            this._cRECIVE.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this._cRECIVE.Location = new System.Drawing.Point(5, 431);
+            this._cRECIVE.Name = "_cRECIVE";
+            this._cRECIVE.Size = new System.Drawing.Size(12, 12);
+            this._cRECIVE.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
+            this._cRECIVE.TabIndex = 9;
+            this._cRECIVE.TabStop = false;
+            // 
             // frmMain
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(462, 448);
+            this.Controls.Add(this._cRECIVE);
             this.Controls.Add(this._cLABELLang);
             this.Controls.Add(this._cLanguage);
             this.Controls.Add(this._cPortSPEED);
@@ -639,6 +665,7 @@ namespace irRemote
             ((System.ComponentModel.ISupportInitialize)(this._cSEPA)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this._cSEP)).EndInit();
             this._cmnuIKONKA.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this._cRECIVE)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -690,6 +717,8 @@ namespace irRemote
         private System.Windows.Forms.ToolStripMenuItem _cMnuSerialSTART;
         private System.Windows.Forms.ComboBox _cLanguage;
         private System.Windows.Forms.Label _cLABELLang;
+        private System.Windows.Forms.ToolStripStatusLabel _cGITLink;
+        private System.Windows.Forms.PictureBox _cRECIVE;
     }
 }
 

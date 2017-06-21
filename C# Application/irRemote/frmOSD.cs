@@ -24,7 +24,7 @@ namespace irRemote
         {
             InitializeComponent();
 
-            TIK.Interval = 250;
+            TIK.Interval = 220;
             TIK.Tick += TIKrobiTAK;
             TIK.Start();
 
@@ -58,7 +58,8 @@ namespace irRemote
                 }
                 else
                 {
-                    if (this.Opacity > 0)
+                    // fadeout
+                    if (this.Opacity > -1)
                     {
                         this.Opacity -= STALE.OSD_ANIM_MODIFICATOR;
                     }
@@ -77,13 +78,13 @@ namespace irRemote
 
         private void TIKrobiTAK(object sender, EventArgs e)
         {
-
             _cTXT.ForeColor = Program.OSD_COLOR;
             _cLOGO.Image = Program.OSD_ICO;
             _cTXT.Text = Program.OSD_TXT;
 
             if (this.Opacity == STALE.OSD_ALPHA)
             {
+                // track time for autoclose
                 Program.TimeOut++;
             }
         }
@@ -92,7 +93,11 @@ namespace irRemote
         {
             // operujemy na głównym monitorze...
             // osd on main monitor...
+#if DEBUG
+            this.Top = this.Height + 5;
+#else
             this.Top = 0;
+#endif
             this.Left = Screen.PrimaryScreen.WorkingArea.Width - this.Width;
             Program.Animating = true;
         }

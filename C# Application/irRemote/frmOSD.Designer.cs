@@ -70,9 +70,10 @@
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
             this.Name = "frmOSD";
             this.Opacity = 0D;
+            this.ShowIcon = false;
             this.ShowInTaskbar = false;
             this.StartPosition = System.Windows.Forms.FormStartPosition.Manual;
-            this.Text = "frmOSD";
+            this.Text = "OSD";
             this.TopMost = true;
             this.TransparencyKey = System.Drawing.Color.FromArgb(((int)(((byte)(80)))), ((int)(((byte)(80)))), ((int)(((byte)(80)))));
             this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.frmOSD_FormClosed);

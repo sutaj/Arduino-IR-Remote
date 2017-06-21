@@ -31,7 +31,7 @@ namespace irRemote
         NotifyIcon IKONA = new NotifyIcon();
         Timer TIK = new Timer();
         SerialPort sPORT = new SerialPort();
-        Image ico_NFlix, ico_Plex, ico_Mysz;
+        Image ico_NFlix, ico_Plex, ico_Mysz, ico_DataON, ico_DataOFF;
         string port=null, GODZ=null;
         int PL=0, MI=0; // fancy animation :P
         LANG.Language LNG;
@@ -47,6 +47,7 @@ namespace irRemote
 
             #region events
             this.FormClosing += ZAMYKANIE;
+            this.FormClosed += EXIT_ALL;
             TIK.Tick += TIKTAK;
             IKONA.DoubleClick += ICON_KLIK;
             IKONA.Disposed += FIXIKONA;
@@ -60,7 +61,8 @@ namespace irRemote
             ico_NFlix = new Bitmap(Properties.Resources.N_icon, 64, 64);
             ico_Plex = new Bitmap(Properties.Resources.Plex_Logo, 64, 64);
             ico_Mysz = new Bitmap(Properties.Resources.mouse, 64, 64);
-
+            ico_DataON = new Bitmap(Properties.Resources.green_circle_th, 16, 16);
+            ico_DataOFF = new Bitmap(Properties.Resources.red_circle_th, 16, 16);
 
             #region Load settings from registry
             try
@@ -110,8 +112,6 @@ namespace irRemote
                 this.WindowState = FormWindowState.Minimized;
             }
             #endregion
-
-            System.Threading.Thread.Sleep(1000);
         }
 
         private void frmMain_Load(object sender, EventArgs e)
@@ -152,6 +152,7 @@ namespace irRemote
         {
             if (sPORT.IsOpen)
             {
+                _cRECIVE.Image = ico_DataON;
                 string line = sPORT.ReadLine().TrimEnd('\n').TrimEnd('\r');
                 this.BeginInvoke(new LineReceivedEvent(LineReceived), line);
             }
@@ -475,6 +476,8 @@ namespace irRemote
             _cMnuSerialSTART.Enabled = !sPORT.IsOpen;
             _cMnuSerialSTOP.Enabled = sPORT.IsOpen;
 
+            _cRECIVE.Image = ico_DataOFF;
+
             try
             {
                 if (Program.MYSZ)
@@ -516,7 +519,10 @@ namespace irRemote
                 {
                     this.Hide();
                 }
-                _cpicTRYB.Image = Program.OSD_ICO;
+                if (_cpicTRYB.Image != Program.OSD_ICO)
+                {
+                    _cpicTRYB.Image = @Program.OSD_ICO;
+                }
             }
             catch (Exception)
             {
@@ -706,7 +712,6 @@ namespace irRemote
                     OSD_MSpeed = LANG.ENGLISH.str_oMouseSpeed;
                     OSD_911 = LANG.ENGLISH.str_o911;
                 }
-
                 ret = true;
             }
             catch (Exception ex)
@@ -788,9 +793,21 @@ namespace irRemote
             this.TopMost = false;
         }
 
+        private void EXIT_ALL(object sender, FormClosedEventArgs e)
+        {
+            Application.Exit();
+        }
+
         private void frmMain_Shown(object sender, EventArgs e)
         {
-            fOSD.Show();
+            // lets start OSD in new thread. SMOOTH animations :)
+            new System.Threading.Thread(() => new frmOSD().ShowDialog()).Start();
+            //fOSD.Show();
+        }
+
+        private void _cGITLink_Click(object sender, EventArgs e)
+        {
+            System.Diagnostics.Process.Start("https://github.com/sutaj/Arduino-IR-Remote");
         }
 
         private void _cmnuzamknij_Click(object sender, EventArgs e)

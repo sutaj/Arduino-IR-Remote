@@ -153,6 +153,12 @@
   <ItemGroup>
     <None Include="Resources\_Settings.png" />
   </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\green-circle-th.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\red-circle-th.png" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PostBuildEvent>

@@ -19,8 +19,8 @@ namespace irRemote
     {
         #region locals...
         private static string tray_name = "USB REMOTE";
-        private static double osd_anim_modificator = .038;
-        private static double osd_alpha = .78;
+        private static double osd_anim_modificator = .025;
+        private static double osd_alpha = .75;
         private static int osd_timeout = 5;
         #endregion
 
