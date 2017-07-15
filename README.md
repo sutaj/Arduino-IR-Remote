@@ -57,7 +57,7 @@ I will make english version later.
 * 90% is now english or have english translations commented out.
 
 ## Changelog
-**17-08-2017**:
+**17-06-2017**:
 
       * Stepup to .NET Framework 4.7
       
@@ -67,7 +67,7 @@ I will make english version later.
       
       * othe minor bugfixes...
       
-**21-08-2017**:
+**21-06-2017**:
       
       * Communication indicator
       
