@@ -59,19 +59,24 @@ I will make english version later.
 ## Changelog
 **17-06-2017**:
 
-      * Stepup to .NET Framework 4.7
+      * [C#] Stepup to .NET Framework 4.7
       
-      * Multi language (need to be fixed - now is as strings in class)
+      * [C#] Multi language (need to be fixed - now is as strings in class)
       
-      * Bugfix when check buttons didn't work correcly
+      * [C#] Bugfix when check buttons didn't work correcly
       
-      * othe minor bugfixes...
+      * [C#] othe minor bugfixes...
       
 **21-06-2017**:
       
-      * Communication indicator
+      * [C#] Communication indicator
       
-      * Moved OSD to new thread, so it will be smoother now
+      * [C#] Moved OSD to new thread, so it will be smoother now
+      
+**01-09-2017**:
+      
+      * [Arduino] Some changes forced by Netflix new webplayer
+      
       
 
 For compiling arduino sketch, you need IR library from: https://github.com/z3t0/Arduino-IRremote (thx to z3t0 btw!)
