@@ -14,24 +14,24 @@
 /* FREE FOR NON COMMERCIAL USE   O N L Y  ! */
 
 /*
- * pinouts
- * 
- *    IR DIOD 
- *   vcc - +5V
- *   gnd - gnd
- *   data - arduino pin 2
- *   
- *   MODE INDICATOR LED:
- *   anode - resistor + +5V
- *   cathode - arduino pin 4
- *   
- *   MOUSE INDICATOR LED:
- *   anode - resistor + +5V rail
- *   cathode - arduino pin 5 (+uncomment line #48 and #103-112)
- * 
- *  for ir use library https://github.com/z3t0/Arduino-IRremote
- * 
- */
+   pinouts
+
+      IR LED
+     vcc - +5V
+     gnd - gnd
+     data - arduino pin 2
+
+     MODE INDICATOR LED:
+     anode - resistor + +5V
+     cathode - arduino pin 4
+
+     MOUSE INDICATOR LED:
+     anode - resistor + +5V rail
+     cathode - arduino pin 5 (+uncomment line #48 and #103-112)
+
+    for ir use library https://github.com/z3t0/Arduino-IRremote
+
+*/
 
 #include <Keyboard.h>
 #include <Mouse.h>
@@ -80,13 +80,29 @@ void setup() {
 void loop() {
   if (Serial.available() > 0) {
     incomingByte = Serial.read();
-    if (incomingByte == 77) { /* M */
+    
+    switch (incomingByte){
+    case 77: /* M - for mouse */
       Serial.println("x102." + String(sMouse));
-      delay(50);
-    }
-    if (incomingByte == 84) { /* T */
-      Serial.println("x101." + String(Swch));
-      delay(50);
+        delay(50);
+        break;
+
+      case 84: /* T - for mode */
+        Serial.println("x101." + String(Swch));
+        delay(50);
+        break;
+
+      case 112: /* p - for mode: plex */
+        Swch = false;
+        delay(100);
+        Serial.println("x101." + String(Swch));
+        break;
+
+      case 110: /* n - for mode : netflix */
+        Swch = true;
+        delay(100);
+        Serial.println("x101." + String(Swch));
+        break;
     }
   }
 
@@ -132,23 +148,27 @@ void loop() {
         Serial.println("x101." + String(Swch));
         break;
 
-      case 0xFDD02F: // Przycisk [-/--] zmienia tryb myszka / pilot
+      case 0xFDD02F: // button [-/--] change mode remote / mouse
         sMouse = !sMouse;
         Serial.println("x102." + String(sMouse));
         break;
 
-      case 0xFDE21D: // AUTO - Lewy przycisk
+      case 0xFDE21D: // AUTO - left click
         if (sMouse) {
           Mouse.click();
           Serial.println("x103");
         }
         break;
 
-      case 0xFDF00F: // INPUT - prawy przycisk
+      case 0xFDF00F: // INPUT - right click
         if (sMouse) {
           Mouse.click(MOUSE_RIGHT);
           Serial.println("x104");
         }
+        break;
+
+      case 0xFD6897:    // menu - show clock.
+        Serial.println("x130");
         break;
 
       case 0xFD807F: // mute
@@ -172,15 +192,16 @@ void loop() {
             // w netflixie pojawia się bug, który nie zawsze aktualizuje pozycję odtwarzanego filmu
             // pauza filmu przed przesunięciem, powinna pominąć ten bug.
             // ale zależy to też od szybkości komputera docelowego...
-            
+            // UPDATE FIX: dla nowej wersji odtwarzacza z 08.2017
+
             // netflix webplayer bugfix
             Keyboard.write(KEY_RETURN);
-            delay(25);
-            Keyboard.press(KEY_RIGHT_ARROW);
-            delay(20);
-            Keyboard.press(KEY_RETURN);
-            delay(20);
-            Keyboard.releaseAll();
+            delay(15);
+            Keyboard.write(KEY_RIGHT_ARROW);
+            delay(15);
+            Keyboard.write(KEY_RETURN);
+            delay(15);
+            Keyboard.write(KEY_RETURN);
           } else { // PLEX
             Keyboard.write(46);
           }
@@ -206,15 +227,16 @@ void loop() {
             // w netflixie pojawia się bug, który nie zawsze aktualizuje pozycję odtwarzanego filmu
             // pauza filmu przed przesunięciem, powinna pominąć ten bug.
             // ale zależy to też od szybkości komputera docelowego...
-            
+            // UPDATE FIX: dla nowej wersji odtwarzacza z 08.2017
+
             // netflix webplayer bugfix
             Keyboard.write(KEY_RETURN);
-            delay(25);
-            Keyboard.press(KEY_LEFT_ARROW);
-            delay(20);
-            Keyboard.press(KEY_RETURN);
-            delay(20);
-            Keyboard.releaseAll();
+            delay(15);
+            Keyboard.write(KEY_LEFT_ARROW);
+            delay(15);
+            Keyboard.write(KEY_RETURN);
+            delay(15);
+            Keyboard.write(KEY_RETURN);
           } else { // PLEX
             Keyboard.write(44);
           }
@@ -306,6 +328,10 @@ void loop() {
         Serial.println("x911");
         break;
 
+      case 0xFDB847: // [AV] - switch auto mode option in program (if running)
+        Serial.println("x200");
+        break;
+
       case 0xFD40BF: // 1
         Keyboard.write(49);
         Serial.println("x116");
@@ -375,7 +401,7 @@ void loop() {
         delay(25);
         Keyboard.releaseAll();
         delay(25);
-        Keyboard.print("http://192.168.52.10:32400/web/index.html");
+        Keyboard.print("http://127.0.0.1:32400/web/index.html");
         Keyboard.press(0xB0);
         Serial.println("x127");
         break;
